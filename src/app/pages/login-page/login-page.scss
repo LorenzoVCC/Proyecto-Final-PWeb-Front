@@ -1,87 +1,166 @@
 .flex-center {
-    height: 100vh;
-    background-color: var(--cream);
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-image: url("/ensaladita.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .login-general {
-    border: 2px solid black;
-    background-color: var(--primary);
-    width: 400px;
-    height: 60%;
+    border: 1px solid black;
+    background: transparent;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    min-width: 23%;
     padding: 30px;
+    display: flex;
+    flex-direction: column;
 }
- 
-.image-center { //Contenedor para centrar imagen tenedor/cuchillo
+
+.image-center {
+    //Contenedor para centrar imagen tenedor/cuchillo
     height: 100px;
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
 }
 
-.image-border { //Contenedor de imagen tenedor/cuchillo
-    border: 2px solid black;
+.image-border {
+    //Contenedor de imagen tenedor/cuchillo
+    border: 3px solid black;
     border-radius: 99px;
     background-color: var(--cream);
-    width: 25%;
     display: flex;
     justify-content: center;
+    box-sizing: border-box;
+    width: 100px;
+    aspect-ratio: 1 / 1;
+    /* mantiene forma con zoom */
+    border: 3px solid black;
+    border-radius: 50%;
+    background-color: var(--cream);
+
+    display: grid;
+    place-items: center;
+
+    flex: 0 0 auto;
 }
-    .image-border img { //TENEDOR/CUCHILLO IMG
-        width: 60px;
-    }
+
+.image-border img {
+    //TENEDOR/CUCHILLO IMG
+    width: 60px;
+}
 
 
 //Contenedor de form general/completo
 .content-container {
-    height: 80%;
-    color: var(--cream);
     display: flex;
+    flex: 1;
     flex-direction: column;
     align-items: center;
 }
 
 form {
-    height: 70%;
     width: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    flex: 1;
 }
 
-.user-credentials { //Container de divs de input ---> Hijo de form 
+.user-credentials {
+    //Container de divs de input ---> Hijo de form 
     width: 100%;
+    height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 40px;
-    margin-bottom: 80px;
+    gap: 20px;
+    padding-bottom: 30px;
 }
 
-.user-input { //Contenedor de inputs/img
-    width: 70%;
+.user-input {
+    //Contenedor de inputs/img
+    width: 80%;
+    padding-left: 10px;
     display: flex;
     justify-content: center;
-    background-color: var(--cream);
+    background-color: white;
     border: 1px solid black;
     border-radius: 99px;
 }
 
 input {
-    background-color: var(--cream);
+    width: 100%;
+    background-color: white;
     padding: 15px;
     border-radius: 99px;
     border: none;
     outline: none;
+    font-size: 15px;
 }
 
-input::placeholder { 
+input::placeholder {
+    font-size: 15px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+    -webkit-text-fill-color: black;
+    border-radius: 99px;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.button-ingresar-container {
+    //Contenedor de #ingresar btn
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#ingresar {
+    //btn
+    height: 40px;
+    width: 40%;
+    cursor: pointer;
     font-size: 20px;
+    color: black;
+    border: 1px solid black;
+    border-radius: 99px;
+    background-color: var(--cream);
+    transition: .3s;
 }
 
-a,p {
-    font-size: 17px;
-    margin-bottom: 20px;
+#ingresar:hover {
+    background-color: var(--cream);
+    box-shadow: 0px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    border: none;
+}
+
+
+.goto-register {
+    //container links forgotpass y register
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    padding-top: 50px;
+    padding-bottom: 10px;
+}
+
+.goto-register p,
+.goto-register a {
+    //links forgotpass y register
+    text-align: center;
+    color: black;
+    text-decoration: none;
 }

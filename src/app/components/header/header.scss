@@ -1,11 +1,45 @@
 .Main-container {
     background-color: var(--primary);
     padding: 0px;
+    height: 130px;
     display: flex;
+    justify-content: space-between;
 }
 
 img {
-    width: 150px;
+    width: 200px;
     padding-left: 30px;
 }
 
+
+/*Menu home - profile*/
+
+nav ul { //lista
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    height: calc(100% - var(--header-h));
+    list-style: none;
+    padding-right: 50px;
+    transition: .3s;
+}
+
+nav ul li a { //enlace a home
+    text-decoration: none;
+    font-size: 20px;
+    text-decoration: none;
+    letter-spacing: 2px;
+    color: black;
+    transition: .2s;
+    display: flex;
+    align-items: center;
+}
+nav ul li a:hover {
+    color: var(--cream);
+    border-radius: 999px;
+}
+
+#top-right-menu {
+    display: flex;
+    align-items: center;
+}

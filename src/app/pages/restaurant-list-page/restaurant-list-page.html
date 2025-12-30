@@ -1,32 +1,33 @@
 <div class="search">
 
-    <div class="search-img-container">
+    <div class="searchbar-positioning">
+        <div class="search-img-container"> 
             <input type="search" id="search-bar" placeholder="Buscar... Milanesas, Pipshash, Empanadas, Helado">
-        <img class="lupa" src="/search.svg" alt="">
-
-    </div>
-    <br>
-    <div class="filters-container">
-        <a routerLink="/login">
+            <img class="lupa" src="/search.svg" alt="">
+        </div>
+        
+        
+        <div class="filters-container">
             <button type="button" id="btn-filters">Filtros
                 <img src="/filters.svg" alt="Buscar" />
             </button>
-        </a>
+        </div>
     </div>
 </div>
 <!--  -->
 <!-- ///////////////////////// -->
-<section id="restaurants-container">
-    
-    <div class="head-comidas">
-        <h2>Restaurantes</h2>
-    </div>
-    <!--  -->
-    <div class="restaurants-list">
-        <!-- Aca va el for -->
-        <app-restaurant-item></app-restaurant-item>
-        <app-restaurant-item></app-restaurant-item>
-        <app-restaurant-item></app-restaurant-item>
-    </div>
 
-</section>
+    <section id="restaurants-container">
+        
+        <div class="head-comidas">
+            <h2>Restaurantes</h2>
+        </div>
+        <!--  -->
+        <div class="restaurants-list">
+            <!-- Aca va el for -->
+            <app-restaurant-item></app-restaurant-item>
+            <app-restaurant-item></app-restaurant-item>
+            <app-restaurant-item></app-restaurant-item>
+        </div>
+        
+    </section>

@@ -12,11 +12,18 @@
   height: 200px;
 }
 
+.searchbar-positioning {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 80%;
+}
+
 .search-img-container {
   background: white;
   border: 1px solid black;
-  width: 80%;
-  display: flex;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+  width: 60%;
+  display: flex;
   border-radius: 999px;
 }
 
@@ -28,15 +35,16 @@
   padding: 12px 12px;
 }
 
-.lupa { //Imagen Lupa Search Bar
+.lupa {
+  //Imagen Lupa Search Bar
   border-radius: 99px;
   width: 30px;
-  opacity:.5;
+  opacity: .5;
   padding-right: 10px;
 }
 
 .filters-container {
-  width: 80%;
+  width: 60%;
 }
 
 a {
@@ -55,22 +63,25 @@ a {
   transition: 0.5s;
 }
 
-#btn-filters img { //SVG FILTROS
+#btn-filters img {
+  //SVG FILTROS
   width: 20px;
 }
 
 #btn-filters:hover {
   background: var(--primary);
-  box-shadow: 2px 5px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 2px 5px 5px 0px rgba(0, 0, 0, 0.75);
 }
 
-#restaurants-container { //Container con h2 incluido
+#restaurants-container {
+  //Container con h2 incluido
   align-items: center;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
 }
 
-.head-comidas { //Div contenedor del h2 Restaurantes
+.head-comidas {
+  //Div contenedor del h2 Restaurantes
   padding-bottom: 15px;
   width: 80%;
 }
@@ -79,14 +90,10 @@ a {
   width: 80%;
   border: 2px solid lightgray;
   padding: 20px;
+
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
   gap: 24px;
-}
-
-
-@media (max-width: 1000px) {
-  .restaurants-list {
-    grid-template-columns: auto;
-  }
+  overflow: hidden;
+  align-items: start;
 }

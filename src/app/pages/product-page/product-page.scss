@@ -1,0 +1,97 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.flex-center {
+    min-height: calc(80vh + 10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/*CONTENEDORES DE PRODUCTOS*/
+.product-data-container {
+    margin: 80px 0px;
+    background-color: rgb(245, 173, 39);
+    display: flex;
+    width: 60%;
+    min-height: 500px;
+    border: 2px solid black;
+    border-radius: 50px;
+}
+
+/*IMAGE*/
+.product-img-container {
+    width: 50%;
+    max-height: 100%;
+    border-right: 2px solid black;
+    border-radius: 50px;
+}
+
+.product-img-container img {
+    width: 100%;
+    min-height: 100%;
+    border-radius: 50px;
+    object-fit: cover;
+}
+/**/
+
+//Contenedor de textos. Nombre, descripcion, precio y descuento.
+.product-name-descrip {
+    width: 50%;
+    min-width: 0;
+    border-radius: 50px;
+    padding: 20px;
+    padding-top: 60px;
+    gap: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-name-descrip h2,
+.product-name-descrip p{
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.product-price-discount { 
+    margin-top: auto;
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding-right: 30px;
+    width: auto;
+}
+
+//Container de volver al menu
+.back-to-menu-btn { 
+    width: 100%;
+    display: flex;
+    padding-left: 50px;
+    padding-top: 20px;
+}
+
+.back-to-menu-btn a {
+    background-color: var(--primary);
+    border-radius: 99px;
+    border: 1px solid black;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    transition: .2s;
+}
+.back-to-menu-btn a:hover {
+    background-color: var(--cream);
+}
+
+
+.back-to-menu-btn img {
+    width: 40px;
+}

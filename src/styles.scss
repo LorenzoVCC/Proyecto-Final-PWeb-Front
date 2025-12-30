@@ -1,8 +1,19 @@
+@font-face {
+  font-family: 'nexa';
+  src: url("/src/fonts/nexa/Nexa-ExtraLight.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 :root {
     --cream: #FFFDD0;
     --primary: #FF7A00;
     --color-on-primary: #FFFFFF;
     --font-sans: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --nexa: "nexa", sans-serif;
+    --header-h: 130px;
+
 }
 
 body {

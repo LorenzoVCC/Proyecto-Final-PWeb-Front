@@ -1,0 +1,20 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.category-pill {
+    background-color: red;
+    width: 150px;
+    border-radius: 99px;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+    transition: .3s;
+}
+
+.category-pill:hover {
+    box-shadow: -5px 5px rgba(0,0,0,0.5);
+    cursor: pointer;
+}
