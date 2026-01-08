@@ -5,7 +5,7 @@
 }
 
 .category-pill {
-    background-color: red;
+    background-color: var(--primary);
     width: 150px;
     border-radius: 99px;
     text-align: center;
@@ -16,5 +16,6 @@
 
 .category-pill:hover {
     box-shadow: -5px 5px rgba(0,0,0,0.5);
+    background-color: var(--phover);
     cursor: pointer;
 }

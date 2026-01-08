@@ -1,3 +1,8 @@
+export interface RestaurantLoginDTO {
+  email: string;
+  password: string;
+}
+
 export interface RestaurantOwnerDTO {
     id: number;
     name: string;
@@ -11,7 +16,7 @@ export interface RestaurantOwnerDTO {
     isActive: boolean;
 }
 
-export interface RestaurantPublicDTO {
+export interface RestaurantForReadDTO {
     id: number;
     name: string;
     description?: string;
@@ -30,11 +35,6 @@ export interface RestaurantForCreateDTO {
   bgImage?: string;
   address: string;
   slug: string;
-}
-
-export interface RestaurantLoginDTO {
-  email: string;
-  password: string;
 }
 
 export interface RestaurantForUpdateDTO {

@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RestaurantItem } from '../../components/restaurant-item/restaurant-item';
 import { RouterLink } from '@angular/router';
 import { RestaurantService } from '../../services/restaurant-service';
-import { RestaurantPublicDTO } from '../../interfaces/restaurant-interface';
+import { RestaurantForReadDTO } from '../../interfaces/restaurant-interface';
 
 @Component({
   selector: 'app-restaurant-list-page',
@@ -14,7 +14,7 @@ import { RestaurantPublicDTO } from '../../interfaces/restaurant-interface';
 
 export class RestaurantListPage {
   private restaurantService = inject(RestaurantService);
-  restaurants: RestaurantPublicDTO[] = []; //Lista contenedora de restaurants
+  restaurants: RestaurantForReadDTO[] = []; //Lista contenedora de restaurants
 
   constructor() {
     this.restaurants = this.restaurantService.getAll();

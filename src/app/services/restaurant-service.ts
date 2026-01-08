@@ -1,19 +1,20 @@
 import { Inject, Injectable } from '@angular/core';
-import { RestaurantPublicDTO } from '../interfaces/restaurant-interface';
+import { RestaurantForReadDTO } from '../interfaces/restaurant-interface';
 
 @Injectable({ providedIn: 'root' })
 
 export class RestaurantService {
 
-  restaurants: RestaurantPublicDTO[] = [
+  restaurants: RestaurantForReadDTO[] = [
     
     {  
       id: 1,
       name: 'Restaurante 1',
       description: 'Descripción mock',
-      imageUrl: '/restaurant-generic-img.jpg',
+      imageUrl: '/maldonal.jpg',
       address: 'Moreno 37',
-      slug: 'res1-moreno'
+      slug: 'res1-moreno',
+      bgImage: '/comidas-fondo.jpg'
     },
     {
       id: 2,
@@ -26,11 +27,11 @@ export class RestaurantService {
 
   ];
 
-  getAll(): RestaurantPublicDTO[] {
+  getAll(): RestaurantForReadDTO[] {
     return this.restaurants;
   }
 
-  getById(id:number): RestaurantPublicDTO | null {
+  getById(id:number): RestaurantForReadDTO | null {
     return this.restaurants.find(r => r.id === id) ?? null
   }
 }

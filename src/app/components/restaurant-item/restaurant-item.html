@@ -1,12 +1,10 @@
 <a [routerLink]="['/restaurant-page', restaurant.id]">
-
-
-
     <div class="item-container">
-        <img class="img-container" src="/restaurant-generic-img.jpg" alt="">
+
+        <img class="img-container" [src]="restaurant.imageUrl || '/restaurant-generic-img.jpg'" alt="restaurant logo" />
 
         <div class="restaurant-info-container">
-            
+
             <h3>{{ restaurant.name }}</h3>
 
             <div class="svg-text">

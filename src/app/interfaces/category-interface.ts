@@ -1,4 +1,4 @@
-export interface CategoryPublicDTO {
+export interface CategoryForReadDTO {
   Id_Category: number;     
   Name: string;
   Id_Restaurant: number;

@@ -4,67 +4,62 @@
         <a routerLink=""><img src="/back-to-menu.svg" alt=""></a>
     </div>
 
+    <!-- ////////////////////////////// -->
     <div class="main-container">
+        <!-- //////////// BANNER  //////////// -->
+        <section id="main-banner"
+            [style.background-image]="'url(' + (restaurant?.bgImage || '/restaurant-generic-img.jpg') + ')'">
 
-        <section id="main-banner">
             <div class="banner-info-positioning">
 
-                <a routerLink="/product-page"><img src="/restaurant-generic-img.jpg" alt=""></a>
+                <img class="restaurant-logo" [src]="restaurant?.imageUrl || '/restaurant-generic-img.jpg'"
+                    alt="restaurant logo" />
+
                 <div class="banner-info">
                     <h1>{{ restaurant?.name }}</h1>
-                    <p>{{ restaurant?.description }} </p>
+                    <p>{{ restaurant?.description }}</p>
                 </div>
             </div>
         </section>
+        <!--  -->
 
-        <!-- /**/ -->
-
+        <!-- //////////////  PILLS   //////////////// -->
         <section id="categories-container-0">
             <div class="categories-container-1">
                 @for (c of categories; track c.Id_Category) {
-                    <category-pill [category]="c"></category-pill>
-                } 
-                @empty 
+                <category-pill [category]="c"></category-pill>
+                }
+                @empty
                 {
-                    <p>No hay categorías.</p>
+                <p>No hay categorías.</p>
                 }
             </div>
         </section>
 
-        <!-- ////////////////////////////// -->
+        <!-- /////////////////CONTAINER Y PRODUCT CARDS//////////////// -->
 
         <section id="products-container-0">
 
-            <section class="container-for-category">
-                <h2>Categoria-Comidas</h2>
-                <div class="products-container-1">
-                    <product-card></product-card>
-                    <product-card></product-card>
-                    <product-card></product-card>
-                    <product-card></product-card>
-                </div>
-            </section>
+            @for (c of categories; track c.Id_Category) {
 
             <section class="container-for-category">
-                <h2>Categoria-Comidas</h2>
-                <div class="products-container-1">
-                    <product-card></product-card>
-                    <product-card></product-card>
-                    <product-card></product-card>
-                </div>
-            </section>
 
-            <section class="container-for-category">
-                <h2>Categoria-Comidas</h2>
+                <div class="category-header">
+                    <h2>{{ c.Name }}</h2>
+
+                    <button class="add-product-btn" type="button" (click)="createProduct(c.Id_Category)">+</button> 
+                </div>
+
                 <div class="products-container-1">
                     <product-card></product-card>
-                    <product-card></product-card>
-                    <product-card></product-card>
-                    <product-card></product-card>
-                    <product-card></product-card>
-                    <product-card></product-card>
                 </div>
+
             </section>
+            }
+            @empty
+            {
+            <p>No hay categorías para mostrar productos.</p>
+            }
         </section>
 
     </div>
