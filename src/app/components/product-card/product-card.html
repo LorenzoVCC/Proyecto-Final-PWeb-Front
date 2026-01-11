@@ -1,13 +1,13 @@
-
 <div class="product-card">
-        <img src="/restaurant-generic-img.jpg" alt="">
-        <div class="product-card-text-container">
+    <img [src]="product().urlImage || 'assets/restaurant-generic-img.jpg'" alt="imagen-producto" />
+
+    <div class="product-card-text-container">
         <h2> {{product().name}} </h2>
         <p> {{product().description}} </p>
-        
+
         <div class="price-container">
             <h4>{{product().price}}</h4>
             <h4>{{product().discount}}</h4>
-        </div>        
+        </div>
     </div>
 </div>

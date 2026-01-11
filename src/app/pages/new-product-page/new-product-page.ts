@@ -34,12 +34,17 @@ export class NewProductPage {
 
     const newProduct: ProductForCreateUpdateDTO = {
       name: form.value.name,
-      description: form.value.description,
-      price: form.value.price,
-      discount: form.value.discount,
-      urlImage: form.value.urlImage,
-      id_Category: Number(this.categoryId),
+      description: form.value.description ?? '',
+      price: Number(form.value.price),
+      discount: Number(form.value.discount ?? 0),
+      urlImage: form.value.urlImage ?? '',
+      id_Category: Number(this.categoryId()),
     };
+
+    console.log('form.value:', form.value);
+    console.log('description:', form.value.description);
+    console.log('urlImage:', form.value.urlImage);
+
 
     this.solicitudABackEnCurso = true;
     const ans = this.productService.createProduct(newProduct);

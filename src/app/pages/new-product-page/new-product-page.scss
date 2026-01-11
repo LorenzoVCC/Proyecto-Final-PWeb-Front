@@ -46,8 +46,9 @@ h1 {
     width: 100%;
 }
 
-#product-data-container textarea {
+#product-data-container textarea, #product-data-container input {
     outline: none;
+    font-size: 20px;
 }
 
 /* CONTENEDOR DE CADA CAMPO */

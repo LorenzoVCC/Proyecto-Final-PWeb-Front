@@ -4,7 +4,7 @@ import { ProductForReadDTO } from "../../interfaces/product-interface";
 
 @Component({
   selector: 'product-card',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './product-card.html',
   styleUrl: './product-card.scss',
 })
