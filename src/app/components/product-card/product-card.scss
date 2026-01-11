@@ -7,7 +7,7 @@
 .product-card {
     display: flex;
     flex-direction: column;
-    height: 350px;
+    height: 440px;
     width: 100%;
     padding: 10px;
     background-color: var(--primary);
@@ -21,9 +21,14 @@
     cursor: pointer;
 }
 
+.img-product-container {
+    height: 50%;
+    background-color: red;
+}
+
 .product-card img {
     width: 100%;
-    height: 160px;
+    height: 225px;
     object-fit: cover;
     padding-bottom: 10px;
 }

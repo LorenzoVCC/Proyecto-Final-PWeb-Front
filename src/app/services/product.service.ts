@@ -7,7 +7,7 @@ export class ProductService {
 
   products: ProductForReadDTO[] = [
     { id_Product: 1, name: 'Papas', description: 'Con cheddar', price: 3500, discount: 0, urlImage: '', id_Category: 1 },
-    { id_Product: 2, name: 'Hamburguesa', description: 'SimpleSimpleSimpleSiSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimplempleSimpleSimpleSimpleSimpleSimpleSimple', price: 5500, discount: 10, urlImage: '', id_Category: 2 },
+    { id_Product: 2, name: 'Hamburguesa', description: 'SimpleSimpleSimpleSiSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimpleSimplempleSimpleSimpleSimpleSimpleSimpleSimple', price: 5500, discount: 10, urlImage: '/Burger', id_Category: 2 },
     { id_Product: 3, name: 'Helado', description: 'Chocolate', price: 2500, discount: 0, urlImage: '', id_Category: 3 },
   ];
 

@@ -1,7 +1,10 @@
 <div class="product-card">
-    <img [src]="product().urlImage || 'assets/restaurant-generic-img.jpg'" alt="imagen-producto" />
+    <div class="img-product-container">
+        <img [src]="product().urlImage || 'assets/restaurant-generic-img.jpg'" alt="imagen-producto" />
+    </div>
 
     <div class="product-card-text-container">
+
         <h2> {{product().name}} </h2>
         <p> {{product().description}} </p>
 
@@ -9,5 +12,6 @@
             <h4>{{product().price}}</h4>
             <h4>{{product().discount}}</h4>
         </div>
+        
     </div>
 </div>
