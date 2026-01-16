@@ -1,6 +1,6 @@
 <div class="flex-center">
-    <form action="">
-
+    <form #registerForm="ngForm" (ngSubmit)="register(registerForm.value)">
+        
         <div class="main-image-title-container">
 
             <div class="utils-crossed-container">
@@ -12,9 +12,9 @@
         <section class="campos-input">
 
             <div class="inputs-container-individual">
-                <label for="firstName">Nombre de tu Restaurante<span>*</span></label>
-                <input id="firstName" name="firstName" id="firstName" ngModel #firstName="" required="true"
-                    autocomplete="firstName">
+                <label for="name">Nombre de tu Restaurante<span>*</span></label>
+                <input id="name" name="name" id="name" ngModel #firstName="" required="true"
+                    autocomplete="name">
             </div>
 
             <div class="inputs-container-individual">
@@ -30,7 +30,7 @@
             </div>
 
             <div class="inputs-container-individual">
-                <label for="password">Repite tu Contraseña<span>*</span></label>
+                <label for="password2">Repite tu Contraseña<span>*</span></label>
                 <input id="password2" name="password2" type="password" ngModel #password2="" minlength="4"
                     autocomplete="new-password" required>
             </div>
@@ -41,22 +41,22 @@
             </div>
 
             <div class="inputs-container-individual">
-                <label for="description">Imagen (URL)</label>
-                <input id="imageurl" name="imageurl" ngModel #imageurl="" minlength="4">
+                <label for="imageUrl">Imagen (URL)</label>
+                <input id="imageUrl" name="imageUrl" ngModel #imageUrl="" minlength="4">
             </div>
 
             <div class="inputs-container-individual">
-                <label for="description">Imagen de Fondo (URL)</label>
-                <input id="bgimage" name="bgimage" ngModel #bgimage="" minlength="4">
+                <label for="bgImage">Imagen de Fondo (URL)</label>
+                <input id="bgImage" name="bgImage" ngModel #bgimage="" minlength="4">
             </div>
 
             <div class="inputs-container-individual">
-                <label for="description">Dirección</label>
-                <input id="address" name="address" ngModel #address="" minlength="4">
+                <label for="address">Dirección<span>*</span></label>
+                <input id="address" name="address" ngModel #address="" minlength="4" required>
             </div>
 
             <div class="inputs-container-individual">
-                <label for="description">Identificador por Nombre</label>
+                <label for="slug">Identificador por Nombre</label>
                 <input id="slug" name="slug" ngModel #slug="" minlength="4">
             </div>
 

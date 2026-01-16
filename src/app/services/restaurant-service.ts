@@ -1,5 +1,5 @@
-import { inject, Inject, Injectable } from '@angular/core';
-import { RestaurantForReadDTO } from '../interfaces/restaurant-interface';
+import { Injectable } from '@angular/core';
+import { RestaurantForCreateDTO, RestaurantForReadDTO } from '../interfaces/restaurant-interface';
 
 @Injectable({ providedIn: 'root' })
 
@@ -33,6 +33,23 @@ export class RestaurantService {
 
   getById(id:number): RestaurantForReadDTO | null {
     return this.restaurants.find(r => r.id === id) ?? null
+  }
+
+  register(dto:RestaurantForCreateDTO): RestaurantForReadDTO {
+    const newId = Math.max(...this.restaurants.map(r => r.id), 0) + 1;
+
+    const created: RestaurantForReadDTO = {
+      id: newId,
+      name: dto.name,
+      description: dto.description ?? '',
+      imageUrl: dto.imageUrl ?? '/restaurant-generic-img.jpg',
+      bgImage: dto.bgImage ?? '/comidas-fondo',
+      address: dto.address,
+      slug: dto.slug,
+    };
+
+    this.restaurants.push(created);
+    return created;
   }
 }
 

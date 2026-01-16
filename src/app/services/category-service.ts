@@ -7,11 +7,7 @@ import { CategoryCreateUpdateDTO, CategoryForReadDTO } from '../interfaces/categ
 
 export class CategoryService {
 
-  private categories: CategoryForReadDTO[] = [
-    { Id_Category: 1, Name: 'Appetizers', Id_Restaurant: 1 },
-    { Id_Category: 2, Name: 'Main Courses', Id_Restaurant: 1 },
-    { Id_Category: 3, Name: 'Appetizers', Id_Restaurant: 2 },
-  ];
+  private categories: CategoryForReadDTO[] = [];
 
   getByRestaurantId(restaurantId: number): CategoryForReadDTO[] {
     return this.categories.filter(c => c.Id_Restaurant === restaurantId);
@@ -23,7 +19,7 @@ export class CategoryService {
 
   createCategory(dtodata: CategoryCreateUpdateDTO, restaurantId: number) {
 
-    const newId = this.categories.length + 1;
+    const newId = Math.max(...this.categories.map(c => c.Id_Category), 0) + 1;
 
     const created: CategoryForReadDTO = {
       Id_Category: newId,

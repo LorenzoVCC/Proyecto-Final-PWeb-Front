@@ -1,7 +1,9 @@
 <a [routerLink]="['/restaurant-page', restaurant.id]">
     <div class="item-container">
 
-        <img class="img-container" [src]="restaurant.imageUrl || '/restaurant-generic-img.jpg'" alt="restaurant logo" />
+        <div class="img-container">    
+            <img class="img-logo-restaurant" [src]="restaurant.imageUrl || '/restaurant-generic-img.jpg'" alt="restaurant logo" />
+        </div>
 
         <div class="restaurant-info-container">
 
