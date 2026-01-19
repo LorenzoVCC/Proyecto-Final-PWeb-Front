@@ -2,31 +2,46 @@ import { inject, Injectable, OnInit } from '@angular/core';
 import { RestaurantLoginDTO } from '../interfaces/restaurant-interface';
 import { Router } from '@angular/router';
 
-@Injectable({
-  providedIn: 'root',
-})
+export type CurrentRestaurant = {
+  id: number;
+  name: string;
+  imageUrl?: string;
+}
 
+const lkey = 'currentRestaurant';
+
+@Injectable({ providedIn: 'root' })
+ 
 export class Auth {
-  restaurantId: number | null = this.readRestaurantId();
+  current: CurrentRestaurant | null = this.readCurrent();
 
-  private readRestaurantId(): number | null {
-    const raw = localStorage.getItem('restaurantId');
-    if (!raw) return null;  
-    const n = Number(raw);
-    return Number.isFinite(n) ? n : null;
+  private readCurrent(): CurrentRestaurant | null {
+    const lec = localStorage.getItem(lkey);
+    if (!lec) return null;  
+    try {
+      return JSON.parse(lec) as CurrentRestaurant; //lectura
+    }
+    catch
+    {
+      return null;
+    }
   }
 
   get isLogged(): boolean {
-    return this.restaurantId !== null;
+    return this.current !== null;
   }
 
-  setLogin(restaurantId: number) {
-    this.restaurantId = restaurantId;
-    localStorage.setItem('restaurantId', String(restaurantId));
+  get restaurantId(): number | null {
+    return this.current?.id ?? null;
+  }
+
+  setLogin(restaurant: CurrentRestaurant) {
+    this.current = restaurant;
+    localStorage.setItem(lkey, JSON.stringify(restaurant));
   }
 
   logout() {
-    this.restaurantId = null;
-    localStorage.removeItem('restaurantId');
+    this.current = null;
+    localStorage.removeItem(lkey);
   }
 }

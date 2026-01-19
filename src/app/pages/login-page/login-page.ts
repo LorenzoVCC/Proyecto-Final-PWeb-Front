@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 
 import { Auth } from '../../services/auth-service';
 import { RestaurantService } from '../../services/restaurant-service';
@@ -47,8 +47,18 @@ export class LoginPage {
       return;
     }
 
-    this.auth.setLogin(restaurantId);
+    const restaurant = this.restaurantService.getById(restaurantId);
 
+    if (!restaurant) {
+      this.errorlogin = true;
+      return;
+    }
+
+    this.auth.setLogin({
+      id: restaurant.id,
+      name: restaurant.name,
+      imageUrl: restaurant.imageUrl
+    });
     this.router.navigate(['/restaurant-page', restaurantId]);
   }
 }
