@@ -38,10 +38,15 @@
 
                 </div>
                 <!--  -->
+
+                @if (auth.isLogged && auth.restaurantId === restaurant?.id) {
                 <div class="category-btn-container">
                     <a [routerLink]="['/create-category', id()]"><button class="add-category-btn"
-                            type="button">+</button></a>
+                            type="button">+</button>
+                    </a>
                 </div>
+                }
+
             </div>
 
         </section>
@@ -57,9 +62,12 @@
                 <div class="category-header">
                     <h2>{{ c.Name }}</h2>
 
+                @if (auth.isLogged && auth.restaurantId === restaurant?.id) {
+
                     <a [routerLink]="['/new-product-page', restaurant?.id, c.Id_Category]">
                         <button class="add-product-btn" type="button">+</button>
                     </a> <!-- (click)="createProduct(c.Id_Category)" -->
+                }
                 </div>
 
                 <div class="products-container-1">
@@ -70,12 +78,12 @@
                     <p>La categoría no contiene productos aún.</p>
                     }
                 </div>
-            </section>
 
+            </section>
             }
             @empty
             {
-            <p>No hay categorías para mostrar productos.</p>
+                <p>No hay categorías para mostrar productos.</p>
             }
 
         </section>

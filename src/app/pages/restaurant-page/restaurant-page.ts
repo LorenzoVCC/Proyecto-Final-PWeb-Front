@@ -6,11 +6,11 @@ import { RestaurantForReadDTO } from '../../interfaces/restaurant-interface';
 
 import { ProductCard } from '../../components/product-card/product-card';
 import { ProductService } from '../../services/product.service';
-import { ProductForCreateUpdateDTO } from '../../interfaces/product-interface';
 
 import { CategoryPill } from '../../components/category-pill/category-pill';
 import { CategoryService } from '../../services/category-service';
 import { CategoryForReadDTO } from '../../interfaces/category-interface';
+import { Auth } from '../../services/auth-service';
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -26,6 +26,7 @@ import { CategoryForReadDTO } from '../../interfaces/category-interface';
 
 export class RestaurantPage implements OnInit {
 
+  auth = inject(Auth);
   private categoryService = inject(CategoryService);
   private productService = inject(ProductService);
 
@@ -57,19 +58,5 @@ export class RestaurantPage implements OnInit {
 
   getProductsByCategoryId(categoryId: number) {
     return this.productService.getByCategoryId(categoryId);
-  }
-///////////////
-  async createProduct(categoryId: number) {
-    if (!this.restaurant) return;
-
-    const newProduct: ProductForCreateUpdateDTO = {
-      name: 'Nuevo producto',
-      description: 'Descripción',
-      price: 1000,
-      discount: 0,
-      urlImage: '',
-      id_Category: categoryId,
-    };
-    this.productService.createProduct(newProduct);
   }
 }

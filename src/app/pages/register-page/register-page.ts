@@ -52,6 +52,6 @@ export class RegisterPage {
     const created = this.restaurantService.register(dto);
     this.isLoading = false;
 
-    this.router.navigate(['/restaurant-page', created.id]);
+    this.router.navigate(['login']);
   }
 }

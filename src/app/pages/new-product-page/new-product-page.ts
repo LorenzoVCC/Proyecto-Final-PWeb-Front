@@ -11,7 +11,7 @@ import { ProductForCreateUpdateDTO } from '../../interfaces/product-interface';
 @Component({
   selector: 'new-product-page',
   standalone: true,
-  imports: [RouterLink, FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './new-product-page.html',
   styleUrl: './new-product-page.scss',
 })
@@ -23,7 +23,7 @@ export class NewProductPage {
   //Paso los parametros recibidos por la URL a las variables restaurantId y categoryId
   restaurantId = input<string>();
   categoryId = input<string>();
-
+  
   errorEnBack = false;
   solicitudABackEnCurso = false;
 

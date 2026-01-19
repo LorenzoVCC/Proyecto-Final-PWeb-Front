@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { RestaurantForCreateDTO, RestaurantForReadDTO } from '../interfaces/restaurant-interface';
+import { RestaurantForCreateDTO, RestaurantForReadDTO, RestaurantLoginDTO } from '../interfaces/restaurant-interface';
 
 @Injectable({ providedIn: 'root' })
 
 export class RestaurantService {
 
   restaurants: RestaurantForReadDTO[] = [
-    
     {  
       id: 1,
       name: 'Restaurante 1',
@@ -24,7 +23,11 @@ export class RestaurantService {
       imageUrl: '/restaurant-generic-img.jpg',
       slug: 'restaurante-2',
     },
+  ];
 
+    private credentials: { restaurantId: number; email: string; password: string }[] = [
+    { restaurantId: 1, email: 'resto1@mail.com', password: '1234' },
+    { restaurantId: 2, email: 'resto2@mail.com', password: '1234' },
   ];
 
   getAll(): RestaurantForReadDTO[] {
@@ -49,7 +52,18 @@ export class RestaurantService {
     };
 
     this.restaurants.push(created);
+    this.credentials.push({
+      restaurantId: newId,
+      email: dto.email,
+      password: dto.password,
+    }) 
     return created;
   }
+
+  authenticate(login: RestaurantLoginDTO): number | null {
+    const resfound = this.credentials.find(c => c.email === login.email && c.password === login.password);
+    return resfound ? resfound.restaurantId: null;
+  }
+
 }
 

@@ -3,6 +3,10 @@ import { Router, RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
+import { Auth } from '../../services/auth-service';
+import { RestaurantService } from '../../services/restaurant-service';
+import { RestaurantLoginDTO } from '../../interfaces/restaurant-interface';
+
 @Component({
   selector: 'app-login-page',
   standalone: true,
@@ -13,21 +17,38 @@ import { CommonModule } from '@angular/common';
 
 export class LoginPage {
   router = inject(Router)
-  solicitudABackEnCurso = false;
+  restaurantService = inject(RestaurantService);
+  auth = inject(Auth);
 
+  solicitudABackEnCurso = false;
   errorlogin = false;
 
-  async login(form:NgForm)
-  {
-    console.log(form.value)
+  async login(form:NgForm) {
+
     this.errorlogin = false;
-    if (!form.value.email || !form.value.password)
+    
+    const email = form.value.email;
+    const password = form.value.password;
+
+    if (!email || !password)
     {
       this.errorlogin = true;
       return
     }
+
+    const dto: RestaurantLoginDTO = { email, password } // ESTE DTO ESTOY USANDO: RESTAURANTLOGINDTO
+    
     this.solicitudABackEnCurso = true;
+    const restaurantId = this.restaurantService.authenticate(dto)
     this.solicitudABackEnCurso = false;
-    this.errorlogin = true;
+    
+    if (!restaurantId) {
+      this.errorlogin = true;
+      return;
+    }
+
+    this.auth.setLogin(restaurantId);
+
+    this.router.navigate(['/restaurant-page', restaurantId]);
   }
 }
