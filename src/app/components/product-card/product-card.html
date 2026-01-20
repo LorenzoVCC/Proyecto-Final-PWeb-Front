@@ -1,4 +1,4 @@
-<div class="product-card">
+<div class="product-card" [routerLink]="['/product-page', product().id_Product]">
     
     <div class="img-product-container">
         <img [src]="product().urlImage || 'assets/restaurant-generic-img.jpg'" alt="imagen-producto" />

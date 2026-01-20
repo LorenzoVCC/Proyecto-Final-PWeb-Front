@@ -56,17 +56,16 @@ nav ul li a:hover {
 
 .profile-pic button {
     background: none;
-    border: none;
+    border: 1px solid rgba(0, 0, 0, 0.58);
+    border-radius: 99px;
     padding: 0;
     cursor: pointer;
-    display: flex;
-    align-items: center;
 }
 
 
 .profile-pic img.avatar {
-    width: 66px;
-    height: 66PX;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     object-fit: cover;
     background-color: var(--phover);
@@ -77,30 +76,41 @@ nav ul li a:hover {
 .dropdown {
     position: absolute;
     top: calc(100% + 8px);
+    right: 0;
+    z-index: 9999;
+
     min-width: 160px;
     background: #fff;
     border: 1px solid rgba(0, 0, 0, .15);
     border-radius: 10px;
     padding: 10px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, .15);
+
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.dropdown.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 
 .dropdown .name {
-  font-weight: 700;
-  margin-bottom: 8px;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 
 .dropdown button {
-  width: 100%;
-  border: 0;
-  background: transparent;
-  text-align: left;
-  padding: 8px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.dropdown button:hover {
-  background: rgba(0,0,0,.06);
+    width: 100%;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
 }

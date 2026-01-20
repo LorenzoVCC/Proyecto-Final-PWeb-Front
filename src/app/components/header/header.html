@@ -12,16 +12,15 @@
 
             @if (auth.isLogged) {
                 <li class="profile-pic">
-                    <button type="button-profile" (click)="toogleMenu()">
+                    <button type="button" (click)="toogleMenu()">
                         <img class="avatar" [src]="auth.current?.imageUrl" alt="perfil"/>
                     </button>
 
-                @if (menuOpen) {
-                    <div class="dropdown">
+                    <div class="dropdown" [class.open]="menuOpen">
                         <div class="name"> {{ auth.current?.name }} </div>
+                        <button type="button">Editar</button>
                         <button type="button" (click)="logout()">Logout</button>
                     </div>
-                }
                 </li>
             }
 

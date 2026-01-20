@@ -1,10 +1,11 @@
 import { RouterLink } from "@angular/router";
 import { Component, input } from '@angular/core';
 import { ProductForReadDTO } from "../../interfaces/product-interface";
+import { ProductPage } from "../../pages/product-page/product-page";
 
 @Component({
   selector: 'product-card',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './product-card.html',
   styleUrl: './product-card.scss',
 })

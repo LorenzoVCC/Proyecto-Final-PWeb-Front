@@ -7,7 +7,8 @@ import { ProductPage } from './pages/product-page/product-page';
 import { ClientLayout } from './layouts/client-layout/client-layout';
 import { NewCategoryPage } from './pages/new-category-page/new-category-page';
 import { NewProductPage } from './pages/new-product-page/new-product-page';
-
+import { authGuard } from './guards/auth-guard';
+import { ownerGuard } from './guards/owner-guard';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,7 @@ export const routes: Routes = [
   {
     path: "",
     component: ClientLayout,
+    canActivateChild: [authGuard],
     children: [
       {
         path: "",
@@ -37,10 +39,12 @@ export const routes: Routes = [
       {
         path: "create-category/:restaurantId", 
         component: NewCategoryPage,
+        canActivate: [ownerGuard]
       },
       {
         path: "new-product-page/:restaurantId/:categoryId",
         component: NewProductPage,
+        canActivate: [ownerGuard],
       }
     ],
   },

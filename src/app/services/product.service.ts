@@ -7,6 +7,10 @@ export class ProductService {
 
   products: ProductForReadDTO[] = [];
 
+  getById(id: number) {
+    return this.products.find(p => p.id_Product === id) ?? null;
+  }
+
   getByCategoryId(getByCategoryId: number) {
     return this.products.filter(p => p.id_Category === getByCategoryId);
   }
@@ -19,4 +23,6 @@ export class ProductService {
     this.products.push(created);
     return created;
   }
+
+
 }
