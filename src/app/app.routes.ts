@@ -45,6 +45,10 @@ export const routes: Routes = [
         path: "new-product-page/:restaurantId/:categoryId",
         component: NewProductPage,
         canActivate: [ownerGuard],
+      },
+      {
+        path: "edit-restaurant/:restaurantId",
+        component: RegisterPage
       }
     ],
   },

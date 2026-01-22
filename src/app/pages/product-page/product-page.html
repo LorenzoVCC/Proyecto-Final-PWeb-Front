@@ -7,18 +7,16 @@
     <article class="product-data-container">
 
         <div class="product-img-container">
-
-            <img src="/restaurant-generic-img.jpg" alt="">
+            <img [src]="product?.urlImage || 'assets/restaurant-generic-img.jpg'" alt="imagen-producto" />
         </div>
 
         <div class="product-name-descrip">
-            <h2>Nombre_Producto</h2>
-            <p>Descripción del producto que puede ser bastante larga para probar el diseño responsive de la tarjeta del producto.
-            </p>
+            <h2> {{ product?.name }}</h2>
+            <p> {{ product?.description }} </p>
 
             <div class="product-price-discount">
-                <h4>Precio</h4>
-                <h4>Descuento</h4>
+                <h4> {{ product?.price }} </h4>
+                <h4> {{ product?.discount }} </h4>
             </div>
         </div>
     </article>

@@ -1,6 +1,6 @@
-import { Component, inject, viewChild } from '@angular/core';
+import { Component, inject, viewChild, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
-import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { RestaurantService } from '../../services/restaurant-service';
@@ -17,13 +17,55 @@ type RestaurantRegisterForm = RestaurantForCreateDTO & { password2: string };
 })
 
 
-export class RegisterPage {
+export class RegisterPage implements OnInit {
+
+  router = inject(Router);
+  route = inject(ActivatedRoute)
+  restaurantService = inject(RestaurantService);
+  
   isLoading = false;
   errorRegister = false;
 
-  restaurantService = inject(RestaurantService);
-  router = inject(Router);
+  isEdit = false;
+  restaurantId: number | null = null;
 
+  name = '';
+  email = '';
+  password = '';
+  password2 = '';
+  description = '';
+  imageUrl = '';
+  bgImage = '';
+  address = '';
+  slug = '';
+
+  ngOnInit(): void {
+   const paramId = this.route.snapshot.paramMap.get('restaurantId'); 
+
+   if (paramId) {
+    this.isEdit = true;
+    this.restaurantId = Number(paramId);
+
+      const resto = this.restaurantService.getById(this.restaurantId);
+//ultimo hecho
+      if (resto) {
+        // precarga del formulario
+        this.name = resto.name;
+        this.email = resto.email;
+        this.description = resto.description ?? '';
+        this.imageUrl = resto.imageUrl ?? '';
+        this.bgImage = resto.bgImage ?? '';
+        this.address = resto.address;
+        this.slug = resto.slug;
+
+        // en edit no se usan passwords
+        this.password = '';
+        this.password2 = '';
+      }
+    }
+  }
+
+//Hasta aca por hoy
   register(form: RestaurantRegisterForm) {
     this.errorRegister = false;
 

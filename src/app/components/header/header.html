@@ -12,14 +12,17 @@
 
             @if (auth.isLogged) {
                 <li class="profile-pic">
-                    <button type="button" (click)="toogleMenu()">
+                    <button type="button" (click)="toggleMenu()">
                         <img class="avatar" [src]="auth.current?.imageUrl" alt="perfil"/>
                     </button>
 
                     <div class="dropdown" [class.open]="menuOpen">
+      
                         <div class="name"> {{ auth.current?.name }} </div>
-                        <button type="button">Editar</button>
+  
+                        <button type="button" [routerLink]="['/edit-restaurant', auth.current?.id]" (click)="menuOpen = false">Editar</button>
                         <button type="button" (click)="logout()">Logout</button>
+      
                     </div>
                 </li>
             }

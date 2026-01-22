@@ -15,7 +15,7 @@ export class Header {
   auth = inject(Auth);
   menuOpen = false;
 
-  toogleMenu() { this.menuOpen = !this.menuOpen; }
+  toggleMenu() { this.menuOpen = !this.menuOpen; }
 
   logout() { this.auth.logout(); this.menuOpen = false; }
 }
