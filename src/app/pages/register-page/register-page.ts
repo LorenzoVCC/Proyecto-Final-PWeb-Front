@@ -1,99 +1,136 @@
-import { Component, inject, viewChild, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink, Router } from '@angular/router';
+import { Component, inject, input, viewChild, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterLink, Router } from '@angular/router';
 
 import { RestaurantService } from '../../services/restaurant-service';
-import { RestaurantForCreateDTO } from '../../interfaces/restaurant-interface';
-
-type RestaurantRegisterForm = RestaurantForCreateDTO & { password2: string };
+import { RestaurantForCreateDTO, RestaurantForUpdateDTO, RestaurantOwnerDTO } from '../../interfaces/restaurant-interface';
+import { Auth } from '../../services/auth-service';
 
 @Component({
   selector: 'register',
   standalone: true,
-  imports: [RouterLink, FormsModule],
+  imports: [RouterLink, FormsModule, CommonModule],
   templateUrl: './register-page.html',
   styleUrl: './register-page.scss',
 })
 
-
 export class RegisterPage implements OnInit {
 
-  router = inject(Router);
-  route = inject(ActivatedRoute)
   restaurantService = inject(RestaurantService);
-  
-  isLoading = false;
-  errorRegister = false;
+  router = inject(Router);
+  auth = inject(Auth);
+
+  errorEnBack = false;
+  solicitudABackEnCurso = false;
 
   isEdit = false;
-  restaurantId: number | null = null;
+  restaurantBack: RestaurantOwnerDTO | undefined = undefined;
 
-  name = '';
-  email = '';
-  password = '';
-  password2 = '';
-  description = '';
-  imageUrl = '';
-  bgImage = '';
-  address = '';
-  slug = '';
+  form = viewChild<NgForm>('registerForm');
 
-  ngOnInit(): void {
-   const paramId = this.route.snapshot.paramMap.get('restaurantId'); 
+  ngOnInit() {
+    
+    const id = this.auth.restaurantId;
 
-   if (paramId) {
+    if (!id) return;
+
     this.isEdit = true;
-    this.restaurantId = Number(paramId);
 
-      const resto = this.restaurantService.getById(this.restaurantId);
-//ultimo hecho
-      if (resto) {
-        // precarga del formulario
-        this.name = resto.name;
-        this.email = resto.email;
-        this.description = resto.description ?? '';
-        this.imageUrl = resto.imageUrl ?? '';
-        this.bgImage = resto.bgImage ?? '';
-        this.address = resto.address;
-        this.slug = resto.slug;
+    const resto = this.restaurantService.getOwnerById(id);
+    if (!resto) return;
 
-        // en edit no se usan passwords
-        this.password = '';
-        this.password2 = '';
-      }
-    }
+    this.restaurantBack = resto;
+
+    setTimeout(() => {
+      this.form()?.setValue({
+        name: resto.name,
+        email: resto.email,
+        password: '',
+        password2: '',
+        description: resto.description ?? '',
+        imageUrl: resto.imageUrl ?? '',
+        bgImage: resto.bgImage ?? '',
+        address: resto.address,
+        slug: resto.slug,
+      });
+    }, 0);
   }
+  ////////////////////////////
 
-//Hasta aca por hoy
-  register(form: RestaurantRegisterForm) {
-    this.errorRegister = false;
+  handleFormSubmission(form: NgForm) {
+    this.errorEnBack = false;
+    this.solicitudABackEnCurso = true;
+    let res;
 
+    if (this.isEdit) {
+      const id = this.auth.restaurantId;
+      if (!id) {
+        this.solicitudABackEnCurso = false;
+        this.errorEnBack = true;
+        return;
+      }
+      const updateResto: RestaurantForUpdateDTO = {
+        name: form.value.name,
+        description: form.value.description,
+        imageUrl: form.value.imageUrl,
+        bgImage: form.value.bgImage,
+        address: form.value.address,
+        slug: form.value.slug,
+      };
+      const updated = this.restaurantService.updateResto(id, updateResto);
+      if (updated) {
+        this.auth.setLogin({
+          id: updated.id,
+          name: updated.name,
+          imageUrl: updated.imageUrl
+        })
+      }
+
+      res = updated ? { id: updated.id } : null;
+      
+      this.solicitudABackEnCurso = false;
+      if (!res) {
+        this.errorEnBack = true;
+        return;
+      }
+      
+      this.router.navigate(['/restaurant-page', res.id]);
+      return;
+    }
+    const newResto: RestaurantForCreateDTO = {
+      name: form.value.name,
+      email: form.value.email,
+      password: form.value.password,
+      description: form.value.description,
+      imageUrl: form.value.imageUrl,
+      bgImage: form.value.bgImage,
+      address: form.value.address,
+      slug: form.value.slug,
+    }
     if (
-      !form.name ||
-      !form.email ||
-      !form.password ||
-      !form.password2 ||
-      !form.address ||
-      !form.slug ||
-      form.password !== form.password2) { this.errorRegister = true; return; }
+      !newResto.name ||
+      !newResto.email ||
+      !newResto.password ||
+      newResto.password !== form.value.password2 ||
+      !newResto.address ||
+      !newResto.slug)
+      {
+        this.solicitudABackEnCurso = false;
+        this.errorEnBack = true;
+        return;
+      }
 
-    this.isLoading = true;
+      const created = this.restaurantService.register(newResto);
+      res = created ? { id: created.id } : null;
 
-    const dto: RestaurantForCreateDTO = {
-      name: form.name,
-      email: form.email,
-      password: form.password,
-      description: form.description ?? '',
-      imageUrl: form.imageUrl ?? '/restaurant-generic-img.jpg',
-      bgImage: form.bgImage ?? '/comidas-fondo.jpg',
-      address: form.address,
-      slug: form.slug,
-    };
+      this.solicitudABackEnCurso = false;
 
-    const created = this.restaurantService.register(dto);
-    this.isLoading = false;
+      if (!res) {
+        this.errorEnBack = true;
+        return;
+      }
 
-    this.router.navigate(['login']);
+      this.router.navigate(['/restaurant-page', res.id])
   }
 }

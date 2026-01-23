@@ -13,7 +13,6 @@ export interface RestaurantOwnerDTO {
     address: string;
     createdAt: string;
     slug: string;
-    isActive: boolean;
 }
 
 export interface RestaurantForReadDTO {
@@ -24,6 +23,7 @@ export interface RestaurantForReadDTO {
     bgImage?: string;
     address: string;
     slug: string;
+    isActive: boolean;
 }
 
 export interface RestaurantForCreateDTO {
@@ -40,6 +40,8 @@ export interface RestaurantForCreateDTO {
 export interface RestaurantForUpdateDTO {
   name?: string;
   description?: string;
+  email?: string,
+  password?: string,
   imageUrl?: string;
   bgImage?: string;
   address?: string;

@@ -88,10 +88,13 @@
 
     .banner-info {
         margin-top: 15px;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        width: 75%;
     }
 
     .banner-info p {
-        max-width: 600px;
+        max-width: 100%;
     }
 
     /*FIN BANNER*/

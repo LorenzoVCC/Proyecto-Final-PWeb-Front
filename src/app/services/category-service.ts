@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { CategoryCreateUpdateDTO, CategoryForReadDTO } from '../interfaces/category-interface';
+import { ProductService } from './product.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root', })
 
 export class CategoryService {
 
+  private products = inject(ProductService);
   private categories: CategoryForReadDTO[] = [];
 
   getByRestaurantId(restaurantId: number): CategoryForReadDTO[] {
@@ -28,6 +28,26 @@ export class CategoryService {
     };
     this.categories.push(created);
     return created;
+  }
+
+  deleteCategory(categoryId: number): boolean {
+
+    this.products.deleteByCategoryId(categoryId);
+  
+    const prev = this.categories.length;
+    this.categories = this.categories.filter(c => c.Id_Category !== categoryId);
+    return this.categories.length !== prev;
+
+  }
+
+  deleteByRestaurantId(restaurantId: number): void {
+    const categoriesDelete = this.categories.filter(c => c.Id_Restaurant === restaurantId);
+
+    for (const c of categoriesDelete) {
+      this.products.deleteByCategoryId(c.Id_Category);
+    }
+
+    this.categories = this.categories.filter(c => c.Id_Restaurant !== restaurantId);
   }
 }
 

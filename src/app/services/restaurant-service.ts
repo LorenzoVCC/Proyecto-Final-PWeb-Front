@@ -1,44 +1,71 @@
-import { Injectable } from '@angular/core';
-import { RestaurantForCreateDTO, RestaurantForReadDTO, RestaurantLoginDTO } from '../interfaces/restaurant-interface';
+import { inject, Injectable } from '@angular/core';
+import { RestaurantForCreateDTO, RestaurantForReadDTO, RestaurantForUpdateDTO, RestaurantLoginDTO, RestaurantOwnerDTO } from '../interfaces/restaurant-interface';
+import { CategoryService } from './category-service';
 
 @Injectable({ providedIn: 'root' })
 
 export class RestaurantService {
-
+  private categoryService = inject(CategoryService);
   restaurants: RestaurantForReadDTO[] = [
-    {  
+    {
       id: 1,
       name: 'Restaurante 1',
-      description: 'Descripción mock',
+      description: 'Descripción localhostDescripciónDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhost4200/',
       imageUrl: '/maldonal.jpg',
       address: 'Moreno 37',
       slug: 'res1-moreno',
-      bgImage: '/comidas-fondo.jpg'
+      bgImage: '/comidas-fondo.jpg',
+      isActive: true
+
     },
     {
       id: 2,
       name: 'Restaurante 2',
-      description: 'Otro restaurante',
+      description: 'Otro restauranteDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhost',
       address: 'Av Siempre Viva 742',
       imageUrl: '/restaurant-generic-img.jpg',
       slug: 'restaurante-2',
+      isActive: true
     },
   ];
 
-    private credentials: { restaurantId: number; email: string; password: string }[] = [
+  private credentials: { restaurantId: number; email: string; password: string }[] = [
     { restaurantId: 1, email: 'resto1@mail.com', password: '1234' },
     { restaurantId: 2, email: 'resto2@mail.com', password: '1234' },
   ];
 
+
+  //Metodos GetBy
   getAll(): RestaurantForReadDTO[] {
-    return this.restaurants;
+    return this.restaurants.filter(r => r.isActive);
   }
 
-  getById(id:number): RestaurantForReadDTO | null {
-    return this.restaurants.find(r => r.id === id) ?? null
+  getById(id: number): RestaurantForReadDTO | null {
+    return this.restaurants.find(r => r.id === id && r.isActive) ?? null
   }
 
-  register(dto:RestaurantForCreateDTO): RestaurantForReadDTO {
+  getOwnerById(id: number): RestaurantOwnerDTO | null {
+    const resto = this.getById(id);
+    if (!resto) return null;
+
+    const creds = this.credentials.find(c => c.restaurantId === id)
+
+    return {
+      id: resto.id,
+      name: resto.name,
+      email: creds?.email ?? '',
+      description: resto.description,
+      imageUrl: resto.imageUrl,
+      bgImage: resto.bgImage,
+      address: resto.address,
+      slug: resto.slug,
+      createdAt: new Date().toISOString(),
+    }
+  }
+
+  //Fin Metodos GetBy
+
+  register(dto: RestaurantForCreateDTO): RestaurantForReadDTO {
     const newId = Math.max(...this.restaurants.map(r => r.id), 0) + 1;
 
     const created: RestaurantForReadDTO = {
@@ -46,9 +73,10 @@ export class RestaurantService {
       name: dto.name,
       description: dto.description ?? '',
       imageUrl: dto.imageUrl ?? '/restaurant-generic-img.jpg',
-      bgImage: dto.bgImage ?? '/comidas-fondo',
+      bgImage: dto.bgImage ?? '/comidas-fondo.jpg',
       address: dto.address,
       slug: dto.slug,
+      isActive: true
     };
 
     this.restaurants.push(created);
@@ -56,13 +84,39 @@ export class RestaurantService {
       restaurantId: newId,
       email: dto.email,
       password: dto.password,
-    }) 
+    })
     return created;
+  }
+
+  updateResto(id: number, dto: RestaurantForUpdateDTO): RestaurantForReadDTO | null {
+    const idResto = this.restaurants.findIndex(r => r.id === id);
+    if (idResto === -1) return null;
+
+    const updated: RestaurantForReadDTO = {
+      ...this.restaurants[idResto],
+      ...dto,                 
+      id: this.restaurants[idResto].id
+    };
+
+    this.restaurants[idResto] = updated;
+    return updated;
+  }
+
+  deleteResto(id: number): boolean {
+    const resto = this.getById(id);
+    if (!resto) return false;
+
+    this.categoryService.deleteByRestaurantId(id);
+    this.credentials = this.credentials.filter(c => c.restaurantId !== id);
+
+    resto.isActive = false;
+
+    return true;
   }
 
   authenticate(login: RestaurantLoginDTO): number | null {
     const resfound = this.credentials.find(c => c.email === login.email && c.password === login.password);
-    return resfound ? resfound.restaurantId: null;
+    return resfound ? resfound.restaurantId : null;
   }
 
 }

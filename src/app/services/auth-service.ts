@@ -11,18 +11,17 @@ export type CurrentRestaurant = {
 const lkey = 'currentRestaurant';
 
 @Injectable({ providedIn: 'root' })
- 
+
 export class Auth {
   current: CurrentRestaurant | null = this.readCurrent();
 
   private readCurrent(): CurrentRestaurant | null {
     const lec = localStorage.getItem(lkey);
-    if (!lec) return null;  
+    if (!lec) return null;
     try {
       return JSON.parse(lec) as CurrentRestaurant; //lectura
     }
-    catch
-    {
+    catch {
       return null;
     }
   }
@@ -42,6 +41,7 @@ export class Auth {
 
   logout() {
     this.current = null;
+
     localStorage.removeItem(lkey);
   }
 }

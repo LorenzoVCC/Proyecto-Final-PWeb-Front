@@ -58,6 +58,17 @@ form {
     margin-bottom: 20px;
 }
 
+.hidden-edit {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.hidden-edit[hidden] {
+    display: none !important;
+}
+
 .inputs-container-individual {
     //Lo dice el nombre 
     display: flex;
@@ -77,6 +88,7 @@ span {
 input,
 textarea {
     min-width: 60%;
+    max-width: 50%;
     outline: none;
 }
 
