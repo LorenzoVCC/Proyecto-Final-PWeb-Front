@@ -28,7 +28,8 @@
             <div class="pills-plus">
                 <div class="categories-container-1">
                     @for (c of categories; track c.Id_Category) {
-                    <category-pill [category]="c"></category-pill>
+                    <category-pill [category]="c" (click)="selectCategory(c.Id_Category)"
+                        [class.selected]="selectedCategoryId === c.Id_Category"></category-pill>
                     }
                     @empty
                     {
@@ -40,6 +41,14 @@
 
                 @if (auth.isLogged && auth.restaurantId === restaurant?.id) {
                 <div class="category-btn-container">
+                    <button class="add-category-btn btn-pencil" type="button" (click)="updateSelectedCategory()"
+                        [disabled]="selectedCategoryId === null" [class.is-disabled]="selectedCategoryId === null">
+                        <img src="/pencil.svg" alt="">
+                    </button>
+                    <button class="add-category-btn" type="button" (click)="deleteSelectedCategory()"
+                        [disabled]="selectedCategoryId === null" [class.is-disabled]="selectedCategoryId === null">
+                        -
+                    </button>
                     <a [routerLink]="['/create-category', id()]"><button class="add-category-btn"
                             type="button">+</button>
                     </a>
@@ -56,6 +65,7 @@
 
             @for (c of categories; track c.Id_Category) {
 
+            @if (selectedCategoryId === null || selectedCategoryId === c.Id_Category) {
             <section class="container-for-category">
 
                 <div class="category-header">
@@ -70,7 +80,7 @@
                 </div>
 
                 <div class="products-container-1">
-                    @for (p of getProductsByCategoryId(c.Id_Category); track p.id_Product) {
+                    @for (p of selectedProducts; track p.id_Product) {
                     <product-card [product]="p"></product-card>
                     }
                     @empty {
@@ -80,12 +90,12 @@
 
             </section>
             }
+            }
             @empty
             {
             <p>No hay categorías para mostrar productos.</p>
             }
 
         </section>
-
     </div>
 </div>

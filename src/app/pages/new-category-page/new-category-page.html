@@ -1,8 +1,8 @@
 <div class="flex-center">
 
-  <form #newCategoryForm="ngForm" (ngSubmit)="handleFormSubmission(newCategoryForm.value)">
+  <form #newCategoryForm="ngForm" (ngSubmit)="handleFormSubmission(newCategoryForm)">
 
-    <h1>Crear Categoría</h1>
+    <h1>Ingrese el nombre de su categoría</h1>
     
     <div class="data-input-container">
       <label for="name">Nombre:</label>
@@ -16,7 +16,7 @@
     </div>
 
     <div class="btn-newcat">
-      <button type="submit">Crear Categoria</button>
+      <button type="submit">Aceptar</button>
     </div>
 
   </form>

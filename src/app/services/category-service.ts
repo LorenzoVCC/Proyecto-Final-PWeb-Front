@@ -17,7 +17,7 @@ export class CategoryService {
     return this.categories.find(c => c.Id_Category === id) ?? null;
   }
 
-  createCategory(dtodata: CategoryCreateUpdateDTO, restaurantId: number) {
+  createCategory(dtodata: CategoryCreateUpdateDTO, restaurantId: number): CategoryForReadDTO {
 
     const newId = Math.max(...this.categories.map(c => c.Id_Category), 0) + 1;
 
@@ -28,6 +28,19 @@ export class CategoryService {
     };
     this.categories.push(created);
     return created;
+  }
+
+  updateCategory(categoryId: number, dto: CategoryCreateUpdateDTO): CategoryForReadDTO | null {
+    const foundId = this.categories.findIndex(c => c.Id_Category === categoryId);
+    if (foundId === -1) return null;
+
+    const updated: CategoryForReadDTO = {
+      ...this.categories[foundId],
+      Name: dto.Name
+    };
+
+    this.categories[foundId] = updated;
+    return updated;
   }
 
   deleteCategory(categoryId: number): boolean {

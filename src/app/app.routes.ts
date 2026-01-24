@@ -33,13 +33,17 @@ export const routes: Routes = [
         component: RestaurantPage,
       },
       {
-        path: "product-page/:id",
-        component: ProductPage,
+        path: "edit-restaurant/:restaurantId",
+        component: RegisterPage
       },
       {
         path: "create-category/:restaurantId", 
         component: NewCategoryPage,
         canActivate: [ownerGuard]
+      },
+      { path: 'edit-category/:restaurantId/:categoryId', 
+        component: NewCategoryPage,
+        canActivate: [ownerGuard] 
       },
       {
         path: "new-product-page/:restaurantId/:categoryId",
@@ -47,9 +51,9 @@ export const routes: Routes = [
         canActivate: [ownerGuard],
       },
       {
-        path: "edit-restaurant/:restaurantId",
-        component: RegisterPage
-      }
+        path: "product-page/:id",
+        component: ProductPage,
+      },
     ],
   },
 
