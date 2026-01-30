@@ -79,14 +79,6 @@ export class RegisterPage implements OnInit {
         slug: form.value.slug,
       };
       const updated = this.restaurantService.updateResto(id, updateResto);
-      if (updated) {
-        this.auth.setLogin({
-          id: updated.id,
-          name: updated.name,
-          imageUrl: updated.imageUrl
-        })
-      }
-
       res = updated ? { id: updated.id } : null;
       
       this.solicitudABackEnCurso = false;

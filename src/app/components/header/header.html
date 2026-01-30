@@ -5,23 +5,19 @@
         <ul>
             <li><a routerLink="">Inicio</a></li>
 
-            @if (!auth.isLogged)
+            @if (!auth.token)
             {
             <li><a routerLink="/login">Ingresar</a></li>
             }
 
-            @if (auth.isLogged) {
+            @if (auth.token) {
             <li class="profile-pic">
-                <button type="button" (click)="toggleMenu()">
-                    <img class="avatar" [src]="auth.current?.imageUrl" alt="perfil" />
-                </button>
+                <button type="button" (click)="toggleMenu()">Perfil</button>
 
                 <div class="dropdown" [class.open]="menuOpen">
-                    <a [routerLink]="['/restaurant-page' , auth.current?.id]"><div class="name"> {{ auth.current?.name }} </div></a>
 
-                    <button type="button" [routerLink]="['/edit-restaurant', auth.current?.id]"
+                    <button type="button" [routerLink]="['/edit-restaurant', auth.restaurantId]"
                         (click)="menuOpen = false">Editar Restaurante</button>
-
 
                     <button type="button" (click)="deleteMyRestaurant()">Eliminar restaurante</button>
 

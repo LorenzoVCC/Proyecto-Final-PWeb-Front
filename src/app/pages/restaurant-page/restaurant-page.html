@@ -39,7 +39,7 @@
                 </div>
                 <!--  -->
 
-                @if (auth.isLogged && auth.restaurantId === restaurant?.id) {
+                @if (auth.token && auth.restaurantId === restaurant?.id) {
                 <div class="category-btn-container">
                     <button class="add-category-btn btn-pencil" type="button" (click)="updateSelectedCategory()"
                         [disabled]="selectedCategoryId === null" [class.is-disabled]="selectedCategoryId === null">
@@ -71,7 +71,7 @@
                 <div class="category-header">
                     <h2>{{ c.Name }}</h2>
 
-                    @if (auth.isLogged && auth.restaurantId === restaurant?.id) {
+                    @if (auth.token && auth.restaurantId === restaurant?.id) {
 
                     <a [routerLink]="['/new-product-page', restaurant?.id, c.Id_Category]">
                         <button class="add-product-btn" type="button">+</button>

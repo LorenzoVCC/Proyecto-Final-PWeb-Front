@@ -26,7 +26,7 @@ export class Header {
   logout() { this.auth.logout(); this.menuOpen = false; }
 
   get isLogged(): boolean {
-    return this.auth.isLogged;
+    return !!this.auth.token;
   }
 
   deleteMyRestaurant() {

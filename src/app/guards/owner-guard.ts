@@ -1,24 +1,25 @@
 import { inject, Inject } from '@angular/core';
 import { CanActivateFn, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { Auth } from '../services/auth-service';
-import { fakeAsync } from '@angular/core/testing';
+//import { fakeAsync } from '@angular/core/testing';
 
-export const ownerGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
+export const ownerGuard: CanActivateFn = (childroute, state) => {
   const auth = inject(Auth);
   const router = inject(Router);
 
-  const restaurantId = Number(route.paramMap.get('restaurantId'));
+  const restaurantId = Number(childroute.paramMap.get('restaurantId'));
 
-  if (!auth.isLogged) 
+  if (!auth.token) 
   {
     router.navigate(['/login']);
     return false;
   }
 
-  if (auth.current?.id !== restaurantId) {
-    router.navigate(['/']);  
+  const myId = auth.restaurantId;
+
+  if (myId === null || myId !== auth.restaurantId) {
+    router.navigate(['/']);
     return false;
   }
-
   return true;
 };

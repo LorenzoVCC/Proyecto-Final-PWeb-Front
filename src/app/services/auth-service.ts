@@ -1,47 +1,74 @@
-import { inject, Injectable, OnInit } from '@angular/core';
-import { RestaurantLoginDTO } from '../interfaces/restaurant-interface';
+import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-
-export type CurrentRestaurant = {
-  id: number;
-  name: string;
-  imageUrl?: string;
-}
-
-const lkey = 'currentRestaurant';
+import { API_URL } from '../config/api';
+import { RestaurantLoginDTO } from '../interfaces/restaurant-interface';
 
 @Injectable({ providedIn: 'root' })
 
 export class Auth {
-  current: CurrentRestaurant | null = this.readCurrent();
 
-  private readCurrent(): CurrentRestaurant | null {
-    const lec = localStorage.getItem(lkey);
-    if (!lec) return null;
-    try {
-      return JSON.parse(lec) as CurrentRestaurant; //lectura
-    }
-    catch {
-      return null;
-    }
-  }
+  token: string | null = localStorage.getItem("token");
+  revisionTokenInterval: number | undefined;
+  router = inject(Router);
 
   get isLogged(): boolean {
-    return this.current !== null;
+    return this.token !== null;
   }
 
-  get restaurantId(): number | null {
-    return this.current?.id ?? null;
-  }
+  async login(loginData: RestaurantLoginDTO) {
 
-  setLogin(restaurant: CurrentRestaurant) {
-    this.current = restaurant;
-    localStorage.setItem(lkey, JSON.stringify(restaurant));
+    const res = await fetch(`${API_URL}/api/authentication`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(loginData),
+    });
+
+    if (res.ok) {
+      const token = await res.text();
+      this.token = token;
+      localStorage.setItem("token", token);
+      this.revisionTokenInterval = this.revisionToken();
+    }
+    return res.ok;
   }
 
   logout() {
-    this.current = null;
+    localStorage.removeItem("token");
+    this.token = null;
+    this.router.navigate(["/login"]);
 
-    localStorage.removeItem(lkey);
+    if (this.revisionTokenInterval) clearInterval(this.revisionTokenInterval);
+    this.revisionTokenInterval = undefined;
+  }
+
+  revisionToken() {
+    return setInterval(() => {
+      if (this.token) {
+        const base64Url = this.token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        const claims: { exp: number } = JSON.parse(jsonPayload);
+        if (new Date(claims.exp * 1000) < new Date()) {
+          this.logout();
+        }
+      }
+    }, 60_000);
+  }
+
+  get restaurantId(): number | null {
+    if (!this.token) return null;
+    
+    try {
+      const payload = JSON.parse(atob(this.token.split('.')[1]));
+      const id = Number(payload.sub);
+      return Number.isNaN(id) ? null : id;
+    } catch {
+      return null;
+    }
   }
 }

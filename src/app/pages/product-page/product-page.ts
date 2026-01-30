@@ -42,7 +42,7 @@ export class ProductPage implements OnInit {
     const categ = this.categoryService.getById(prodId.id_Category);
     this.restaurantBack = categ?.Id_Restaurant ?? null;
 
-    this.canEdit = this.auth.isLogged && this.restaurantBack !== null && this.auth.restaurantId === this.restaurantBack;
+    this.canEdit = !!this.auth.token && this.restaurantBack !== null && this.auth.restaurantId === this.restaurantBack;
   }
 
   backMenu() {

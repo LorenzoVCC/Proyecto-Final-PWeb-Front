@@ -1,3 +1,9 @@
+export interface CurrentRestaurant {
+  id: number;
+  name: string;
+  imageUrl?: string;
+}
+
 export interface RestaurantLoginDTO {
   email: string;
   password: string;

@@ -6,8 +6,11 @@ export const authGuard: CanActivateChildFn = (childRoute, state) => {
   const authService = inject(Auth);
   const router = inject(Router);
 
-  if(authService.isLogged) return true;
-
-  router.navigate(['/login']);
-  return false;
+  if(!authService.token) { 
+    const redirectPath = router.parseUrl("/login");
+    return new RedirectCommand(redirectPath, {
+      skipLocationChange: true,
+    });
+  }
+  return true
 };

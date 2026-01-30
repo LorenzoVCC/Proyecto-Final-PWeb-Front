@@ -6,33 +6,12 @@ import { CategoryService } from './category-service';
 
 export class RestaurantService {
   private categoryService = inject(CategoryService);
-  restaurants: RestaurantForReadDTO[] = [
-    {
-      id: 1,
-      name: 'Restaurante 1',
-      description: 'Descripción localhostDescripciónDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhost4200/',
-      imageUrl: '/maldonal.jpg',
-      bgImage: '/comidas-fondo.jpg',
-      address: 'Moreno 37',
-      slug: 'res1-moreno',
-      isActive: true
-    },
-    {
-      id: 2,
-      name: 'Restaurante 2',
-      description: 'Otro restauranteDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhostDescripción localhost',
-      address: 'Av Siempre Viva 742',
-      imageUrl: '/restaurant-generic-img.jpg',
-      slug: 'restaurante-2',
-      isActive: true
-    },
-  ];
+  restaurants: RestaurantForReadDTO[] = [];
 
-  private credentials: { restaurantId: number; email: string; password: string }[] = [
-    { restaurantId: 1, email: 'resto1@mail.com', password: '1234' },
-    { restaurantId: 2, email: 'resto2@mail.com', password: '1234' },
-  ];
-
+  // private credentials: { restaurantId: number; email: string; password: string }[] = [
+  //   { restaurantId: 1, email: 'resto1@mail.com', password: '1234' },
+  //   { restaurantId: 2, email: 'resto2@mail.com', password: '1234' },
+  // ];
 
   //Metodos GetBy
   getAll(): RestaurantForReadDTO[] {
@@ -47,12 +26,10 @@ export class RestaurantService {
     const resto = this.getById(id);
     if (!resto) return null;
 
-    const creds = this.credentials.find(c => c.restaurantId === id)
-
     return {
       id: resto.id,
       name: resto.name,
-      email: creds?.email ?? '',
+      email: '',
       description: resto.description,
       imageUrl: resto.imageUrl,
       bgImage: resto.bgImage,
@@ -79,11 +56,11 @@ export class RestaurantService {
     };
 
     this.restaurants.push(created);
-    this.credentials.push({
-      restaurantId: newId,
-      email: dto.email,
-      password: dto.password,
-    })
+    // this.credentials.push({
+    //   restaurantId: newId,
+    //   email: dto.email,
+    //   password: dto.password,
+    // })
     return created;
   }
 
@@ -106,17 +83,10 @@ export class RestaurantService {
     if (!resto) return false;
 
     this.categoryService.deleteByRestaurantId(id);
-    this.credentials = this.credentials.filter(c => c.restaurantId !== id);
 
     resto.isActive = false;
 
     return true;
   }
-
-  authenticate(login: RestaurantLoginDTO): number | null {
-    const resfound = this.credentials.find(c => c.email === login.email && c.password === login.password);
-    return resfound ? resfound.restaurantId : null;
-  }
-
 }
 
