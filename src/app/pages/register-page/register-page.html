@@ -13,7 +13,7 @@
 
             <div class="inputs-container-individual">
                 <label for="name">Nombre de tu Restaurante<span>*</span></label>
-                <input id="name" name="name" ngModel required="true" autocomplete="name" #name="ngModel">
+                <input id="name" name="name" ngModel required autocomplete="name" #name="ngModel">
                 @if (name.invalid && !name.pristine) {
                 <p class="error">Debe colocar un Nombre.</p>
                 }
@@ -24,21 +24,22 @@
 
                 <div class="inputs-container-individual">
                     <label for="email">Correo electrónico<span>*</span></label>
-                    <input id="email" name="email" type="email" [required]="!isEdit" ngModel #email="ngModel" 
+                    <input id="email" name="email" type="email" [required]="!isEdit" ngModel #email="ngModel"
                         autocomplete="email">
                 </div>
 
                 <div class="inputs-container-individual">
                     <label for="password">Contraseña<span>*</span></label>
-                    <input id="password" name="password" type="password" [required]="!isEdit" ngModel #password="ngModel" minlength="4"
-                        autocomplete="new-password" required>
+                    <input id="password" name="password" type="password" [required]="!isEdit" ngModel
+                        #password="ngModel" minlength="4" autocomplete="new-password">
                 </div>
 
                 <div class="inputs-container-individual">
                     <label for="password2">Repite tu Contraseña<span>*</span></label>
-                    <input id="password2" name="password2" type="password" [required]="!isEdit" ngModel #password2="ngModel" minlength="4"
-                        autocomplete="new-password" required>
+                    <input id="password2" name="password2" type="password" [required]="!isEdit" ngModel
+                        #password2="ngModel" minlength="4" autocomplete="new-password">
                 </div>
+
 
             </div>
             <!-- //////////////////////////////////////////// -->

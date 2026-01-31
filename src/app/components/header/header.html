@@ -1,32 +1,61 @@
-<div class="Main-container">
-    <a routerLink="/"><img src="/Mainlogo.png" alt=""></a>
+<header class="header">
+  <a class="header__brand" routerLink="/">
+    <img class="header__logo" src="/Mainlogo.png" alt="Logo">
+  </a>
 
-    <nav id="top-right-menu">
-        <ul>
-            <li><a routerLink="">Inicio</a></li>
+  <nav class="header__nav" aria-label="Navegación principal">
+    <ul class="header__menu">
+      <li class="header__item">
+        <a class="header__link" routerLink="">Inicio</a>
+      </li>
 
-            @if (!auth.token)
-            {
-            <li><a routerLink="/login">Ingresar</a></li>
-            }
+      @if (!auth.token) {
+        <li class="header__item">
+          <a class="header__link" routerLink="/login">Ingresar</a>
+        </li>
+      }
 
-            @if (auth.token) {
-            <li class="profile-pic">
-                <button type="button" (click)="toggleMenu()">Perfil</button>
+      @if (auth.token) {
+        <li class="header__item header__item--profile">
+          <button type="button" class="header__profile-btn header__link" (click)="toggleMenu()">Perfil</button>
 
-                <div class="dropdown" [class.open]="menuOpen">
+          <div class="header__dropdown" [class.header__dropdown--open]="menuOpen">
+            <button
+              type="button"
+              class="header__dropdown-item header__dropdown-item--ownresto"
+              [routerLink]="['/restaurant-page', auth.restaurantId]"
+              (click)="menuOpen = false"
+            >
+              Mi restaurante
+            </button>
 
-                    <button type="button" [routerLink]="['/edit-restaurant', auth.restaurantId]"
-                        (click)="menuOpen = false">Editar Restaurante</button>
+            <button
+              type="button"
+              class="header__dropdown-item"
+              [routerLink]="['/edit-restaurant', auth.restaurantId]"
+              (click)="menuOpen = false"
+            >
+              Editar restaurante
+            </button>
 
-                    <button type="button" (click)="deleteMyRestaurant()">Eliminar restaurante</button>
+            <button
+              type="button"
+              class="header__dropdown-item"
+              (click)="deleteMyRestaurant()"
+            >
+              Eliminar restaurante
+            </button>
 
-                    <button type="button" (click)="logout()">Logout</button>
-
-                </div>
-            </li>
-            }
-
-        </ul>
-    </nav>
-</div>
+            <button
+              type="button"
+              class="header__dropdown-item"
+              (click)="logout()"
+            >
+              Logout
+            </button>
+          </div>
+        </li>
+      }
+    </ul>
+  </nav>
+</header>

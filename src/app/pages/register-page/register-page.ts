@@ -1,10 +1,10 @@
-import { Component, inject, input, viewChild, OnInit } from '@angular/core';
+import { Component, inject, viewChild, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 
 import { RestaurantService } from '../../services/restaurant-service';
-import { RestaurantForCreateDTO, RestaurantForUpdateDTO, RestaurantOwnerDTO } from '../../interfaces/restaurant-interface';
+import { RestaurantForCreateDTO, RestaurantForReadDTO, RestaurantForUpdateDTO } from '../../interfaces/restaurant-interface';
 import { Auth } from '../../services/auth-service';
 
 @Component({
@@ -25,19 +25,17 @@ export class RegisterPage implements OnInit {
   solicitudABackEnCurso = false;
 
   isEdit = false;
-  restaurantBack: RestaurantOwnerDTO | undefined = undefined;
+  restaurantBack: RestaurantForReadDTO | undefined = undefined;
 
   form = viewChild<NgForm>('registerForm');
 
-  ngOnInit() {
-    
+  async ngOnInit() {
     const id = this.auth.restaurantId;
-
     if (!id) return;
 
     this.isEdit = true;
 
-    const resto = this.restaurantService.getOwnerById(id);
+    const resto = await this.restaurantService.getById(id);
     if (!resto) return;
 
     this.restaurantBack = resto;
@@ -45,7 +43,7 @@ export class RegisterPage implements OnInit {
     setTimeout(() => {
       this.form()?.setValue({
         name: resto.name,
-        email: resto.email,
+        email: '',
         password: '',
         password2: '',
         description: resto.description ?? '',
@@ -58,71 +56,70 @@ export class RegisterPage implements OnInit {
   }
   ////////////////////////////
 
-  handleFormSubmission(form: NgForm) {
+  async handleFormSubmission(form: NgForm) {
     this.errorEnBack = false;
     this.solicitudABackEnCurso = true;
-    let res;
 
-    if (this.isEdit) {
-      const id = this.auth.restaurantId;
-      if (!id) {
-        this.solicitudABackEnCurso = false;
-        this.errorEnBack = true;
-        return;
-      }
-      const updateResto: RestaurantForUpdateDTO = {
+    if (!this.isEdit) {
+      const dto: RestaurantForCreateDTO = {
         name: form.value.name,
+        email: form.value.email,
+        password: form.value.password,
         description: form.value.description,
         imageUrl: form.value.imageUrl,
         bgImage: form.value.bgImage,
         address: form.value.address,
         slug: form.value.slug,
       };
-      const updated = this.restaurantService.updateResto(id, updateResto);
-      res = updated ? { id: updated.id } : null;
-      
-      this.solicitudABackEnCurso = false;
-      if (!res) {
-        this.errorEnBack = true;
-        return;
-      }
-      
-      this.router.navigate(['/restaurant-page', res.id]);
-      return;
-    }
-    const newResto: RestaurantForCreateDTO = {
-      name: form.value.name,
-      email: form.value.email,
-      password: form.value.password,
-      description: form.value.description,
-      imageUrl: form.value.imageUrl,
-      bgImage: form.value.bgImage,
-      address: form.value.address,
-      slug: form.value.slug,
-    }
-    if (
-      !newResto.name ||
-      !newResto.email ||
-      !newResto.password ||
-      newResto.password !== form.value.password2 ||
-      !newResto.address ||
-      !newResto.slug)
-      {
+
+      if (
+        !dto.name ||
+        !dto.email ||
+        !dto.password ||
+        dto.password !== form.value.password2 ||
+        !dto.address ||
+        !dto.slug
+      ) {
         this.solicitudABackEnCurso = false;
         this.errorEnBack = true;
         return;
       }
 
-      const created = this.restaurantService.register(newResto);
-      res = created ? { id: created.id } : null;
-
+      const ok = await this.restaurantService.register(dto);
       this.solicitudABackEnCurso = false;
 
-      if (!res) {
+      if (!ok) {
         this.errorEnBack = true;
         return;
       }
+      this.router.navigate(['/login']);
+      return;
+    }
+    // //////////////////
+    const id = this.auth.restaurantId;
+    if (!id) {
+      this.solicitudABackEnCurso = false;
+      this.errorEnBack = true;
+      return;
+    }
 
-      this.router.navigate(['/restaurant-page', res.id])
+    const updateResto: RestaurantForUpdateDTO = {
+      name: form.value.name,
+      description: form.value.description,
+      imageUrl: form.value.imageUrl,
+      bgImage: form.value.bgImage,
+      address: form.value.address,
+      slug: form.value.slug,
+    };
+
+    const ok = await this.restaurantService.updateResto(id, updateResto);
+    this.solicitudABackEnCurso = false;
+
+    if (!ok) {
+      this.errorEnBack = true;
+      return;
+    }
+
+    this.router.navigate(['/restaurant-page', id]);
   }
 }

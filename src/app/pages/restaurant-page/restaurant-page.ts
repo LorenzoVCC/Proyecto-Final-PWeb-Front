@@ -45,18 +45,23 @@ export class RestaurantPage implements OnInit {
   selectedCategoryId: number | null = null;
 
   ///////////////
- ngOnInit() {
+  async ngOnInit() {
     this.cargandoRestaurant = true;
 
-    this.restaurant = this.restaurantService.getAll().find(
-      r => r.id.toString() === this.id());
+    const idNum = Number(this.id()); 
+    if (Number.isNaN(idNum)) {
+      this.cargandoRestaurant = false;
+      return;
+    }
+
+    this.restaurant = await this.restaurantService.getById(idNum) ?? undefined;
 
     if (this.restaurant) {
       this.categories = this.categoryService.getByRestaurantId(this.restaurant.id);
     } else {
       this.categories = [];
     }
-
+    
     this.selectedCategoryId = null;
     this.cargandoRestaurant = false;
   }
