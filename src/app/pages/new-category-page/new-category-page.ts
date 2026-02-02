@@ -3,8 +3,6 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 
-import { NewProductPage } from '../new-product-page/new-product-page';
-
 import { CategoryService } from '../../services/category-service';
 import { CategoryCreateUpdateDTO, CategoryForReadDTO } from '../../interfaces/category-interface';
 import { Auth } from '../../services/auth-service';
@@ -34,32 +32,37 @@ export class NewCategoryPage implements OnInit {
 
   form = viewChild<NgForm>('newCategoryForm');
 
-  ngOnInit() {
-    const loggedRestaurant = this.auth.restaurantId;
-    if (!loggedRestaurant) return;
+  async ngOnInit() {
 
-    const catIdEdit = this.categoryId(); if (!catIdEdit) return;
-    //Parseo string ---> Number 
+    const loggedRestaurantId = this.auth.restaurantId;
+    if (!loggedRestaurantId) return;
+
+    const catIdEdit = this.categoryId();
+    if (!catIdEdit) return;
+
     const catId = Number(catIdEdit);
     if (Number.isNaN(catId)) return;
 
+    const urlRestoId = Number(this.restaurantId());
+    if (Number.isNaN(urlRestoId)) return;
+
+    if (loggedRestaurantId !== urlRestoId) return;
     this.isEdit = true;
 
-    const cat = this.categoryService.getById(catId);
+    const cat = await this.categoryService.getById(catId);
     if (!cat) return;
 
-    const urlRestoId = Number(this.restaurantId());
-    if (cat.Id_Restaurant !== loggedRestaurant) return;
+    if (cat.Id_Restaurant !== loggedRestaurantId) return;
     if (cat.Id_Restaurant !== urlRestoId) return;
 
     this.categoryBack = cat;
 
-    this.form()?.setValue({
-      name: cat.Name
-    });
+    setTimeout(() => {
+      this.form()?.setValue({ name: cat.Name });
+    }, 0);
   }
 
-  handleFormSubmission(form: NgForm) {
+  async handleFormSubmission(form: NgForm) {
     this.errorEnBack = false;
     this.solicitudABackEnCurso = true;
 
@@ -77,10 +80,7 @@ export class NewCategoryPage implements OnInit {
       return;
     }
 
-    const dto: CategoryCreateUpdateDTO = {
-      Name: (form.value.name ?? '').trim(),
-    };
-
+    const dto: CategoryCreateUpdateDTO = { Name: (form.value.name ?? '').trim() };
     if (!dto.Name) {
       this.solicitudABackEnCurso = false;
       this.errorEnBack = true;
@@ -96,7 +96,7 @@ export class NewCategoryPage implements OnInit {
         return;
       }
 
-      const updated = this.categoryService.updateCategory(catId, dto);
+      const updated = await this.categoryService.updateCategory(catId, dto);
       this.solicitudABackEnCurso = false;
 
       if (!updated) {

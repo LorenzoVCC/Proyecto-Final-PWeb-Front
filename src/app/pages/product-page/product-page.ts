@@ -30,19 +30,22 @@ export class ProductPage implements OnInit {
   restaurantBack: number | null = null;
   canEdit = false;
 
-  ngOnInit() {
+  async ngOnInit() {
     const id = Number(this.id());
     if (Number.isNaN(id)) return;
 
-    const prodId = this.productService.getById(id);
+    const prodId = await this.productService.getById(id);
     if (!prodId) return;
 
     this.product = prodId;
 
-    const categ = this.categoryService.getById(prodId.id_Category);
+    const categ = await this.categoryService.getById(prodId.id_Category);
     this.restaurantBack = categ?.Id_Restaurant ?? null;
 
-    this.canEdit = !!this.auth.token && this.restaurantBack !== null && this.auth.restaurantId === this.restaurantBack;
+    this.canEdit = 
+    !!this.auth.token && 
+    this.restaurantBack !== null && 
+    this.auth.restaurantId === this.restaurantBack;
   }
 
   backMenu() {

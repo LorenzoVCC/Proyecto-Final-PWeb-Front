@@ -14,6 +14,7 @@
             <div class="inputs-container-individual">
                 <label for="name">Nombre de tu Restaurante<span>*</span></label>
                 <input id="name" name="name" ngModel required autocomplete="name" #name="ngModel">
+
                 @if (name.invalid && !name.pristine) {
                 <p class="error">Debe colocar un Nombre.</p>
                 }
@@ -63,6 +64,10 @@
             <div class="inputs-container-individual">
                 <label for="address">Dirección<span>*</span></label>
                 <input id="address" name="address" ngModel autocomplete="address" #address="ngModel" required>
+
+                @if (address.invalid && !address.pristine) {
+                <p class="error">Debe colocar una dirección.</p>
+                }
             </div>
 
             <div class="inputs-container-individual">

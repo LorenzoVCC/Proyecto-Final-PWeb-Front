@@ -1,56 +1,168 @@
 import { inject, Injectable } from '@angular/core';
+import { Auth } from './auth-service';
 import { ProductForCreateUpdateDTO, ProductForReadDTO } from '../interfaces/product-interface';
+import { API_URL } from '../config/api';
 
 @Injectable({ providedIn: 'root' })
 
 export class ProductService {
-  private products: ProductForReadDTO[] = [
-    {
-      id_Product: 1,
-      name: 'Manito Durum',
-      description: 'Cocción: Carne apilada en forma de cono que gira verticalmente, cocinándose uniformemente mientras la capa exterior se tuesta Adobo: Incluye especias como cardamomo, comino, pimienta de Jamaica, canela, y sumac, lo que le da un sabor complejo y aromático. Ingredientes típicos: Además de la carne, lleva lechuga, tomate, pepino, cebolla, encurtidos y salsa de yogur con hierbabuena o tahini (pasta de sésamo). Variantes: Aunque el original es de cordero, las versiones populares de pollo y ternera son comunes. ',
-      price: 5000,
-      discount: 20,
-      urlImage: '/shawarma.jpg',
-      id_Category: 1,
+  auth = inject(Auth);
+  readonly URL_BASE = `${API_URL}/api/Product`;
+
+  products: ProductForReadDTO[] = [];
+
+  private mapProduct(p: any): ProductForReadDTO {
+    return {
+      id_Product: p.id_Product ?? p.Id_Product ?? p.idProduct ?? p.id,
+      name: p.name ?? p.Name ?? '',
+      description: p.description ?? p.Description ?? '',
+      price: p.price ?? p.Price ?? 0,
+      discount: p.discount ?? p.Discount ?? 0,
+      urlImage: p.urlImage ?? p.UrlImage ?? '',
+      id_Category: p.id_Category ?? p.Id_Category ?? p.idCategory ?? 0,
+    };
+  }
+  ///////////////////
+  async getById(id: number) {
+    const res = await fetch(`${this.URL_BASE}/${id}`, {
+      method: 'GET',
+      headers: { Authorization: 'Bearer ' + this.auth.token },
+    });
+
+    if (res.status === 401) {
+      this.auth.logout();
+      return null;
     }
-  ];
 
-  getById(id: number) {
-    return this.products.find(p => p.id_Product === id) ?? null;
+    if (!res.ok) return null;
+
+    const data = await res.json();
+    return this.mapProduct(data);
   }
+  ///////////////////
+  async getByCategoryId(categoryId: number) {
+    const res = await fetch(`${this.URL_BASE}/by-category/${categoryId}`, {
+      method: 'GET',
+      headers: { Authorization: 'Bearer ' + this.auth.token },
+    });
 
-  getByCategoryId(categoryid: number) {
-    return this.products.filter(p => p.id_Category === categoryid);
+    if (res.status === 401) {
+      this.auth.logout();
+      this.products = [];
+      return [];
+    }
+
+    if (!res.ok) {
+      this.products = [];
+      return [];
+    }
+
+    const data = await res.json();
+    const list = data.map((p: any) => this.mapProduct(p));
+    this.products = list;
+    return list;
   }
+  ///////////////////
+  async createProduct(dto: ProductForCreateUpdateDTO) {
+    const payload: any = {
+      name: dto.name,
+      description: dto.description,
+      price: dto.price,
+      discount: dto.discount,
+      urlImage: dto.urlImage,
+      id_Category: dto.id_Category,
+    };
 
-  createProduct(dto: ProductForCreateUpdateDTO): ProductForReadDTO {
-    const newId = Math.max(...this.products.map(p => p.id_Product), 0) + 1;
-    const created: ProductForReadDTO = { id_Product: newId, ...dto };
+    const res = await fetch(this.URL_BASE, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.auth.token,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (res.status === 401) {
+      this.auth.logout();
+      return null;
+    }
+
+    if (!res.ok) return null;
+
+    const rescreated = await res.json();
+    const created = this.mapProduct(rescreated);
+
     this.products.push(created);
     return created;
-  };
-
-  updateProduct(productId: number, dto: ProductForCreateUpdateDTO): ProductForReadDTO | null {
-    const idfound = this.products.findIndex(p => p.id_Product === productId);
-    if (idfound === -1) return null;
-
-    const updated: ProductForReadDTO = {
-      ...this.products[idfound],
-      ...dto,
-      id_Product: this.products[idfound].id_Product
-    };
-    this.products[idfound] = updated;
-    return updated;
-  };
-
-  deleteProduct(productId: number): boolean {
-    const prev = this.products.length;
-    this.products = this.products.filter(p => p.id_Product !== productId);
-    return this.products.length !== prev;
   }
+  ///////////////////
+  async updateProduct(productId: number, dto: ProductForCreateUpdateDTO) {
+    const payload: any = {
+      name: dto.name,
+      description: dto.description,
+      price: dto.price,
+      discount: dto.discount,
+      urlImage: dto.urlImage,
+      id_Category: dto.id_Category,
+    };
 
+    const res = await fetch(`${this.URL_BASE}/${productId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.auth.token,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (res.status === 401) {
+      this.auth.logout();
+      return null;
+    }
+
+    if (!res.ok) return null;
+
+    this.products = this.products.map(old => {
+      if (old.id_Product === productId) {
+        return {
+          ...old,
+          name: dto.name,
+          description: dto.description,
+          price: dto.price,
+          discount: dto.discount,
+          urlImage: dto.urlImage,
+          id_Category: dto.id_Category,
+        };
+      }
+      return old;
+    });
+
+    return this.getById(productId);
+  }
+  /////////////////// 
+  async deleteProduct(productId: number) {
+    const res = await fetch(`${this.URL_BASE}/${productId}`, {
+      method: 'DELETE',
+      headers: { Authorization: 'Bearer ' + this.auth.token },
+    });
+
+    if (res.status === 401) {
+      this.auth.logout();
+      return null;
+    }
+
+    if (!res.ok) return false;
+
+    this.products = this.products.filter(p => p.id_Product !== productId);
+    return true;
+  }
+  ///////////////////
   deleteByCategoryId(categoryId: number): void {
     this.products = this.products.filter(p => p.id_Category !== categoryId);
   }
+
+  getCachedByCategoryId(categoryId: number) {
+    return this.products.filter(p => p.id_Category === categoryId);
+  }
+
 }

@@ -50,7 +50,7 @@
 /*CONTENEDORES DE PRODUCTOS*/
 .product-data-container {
  
-    background-color: var(--phover);
+    background-color: var(--cream);
     display: flex;
     width: 60%;
     min-height: 500px;
@@ -85,6 +85,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    background-color: var(--bgwhite);
 }
 
 .product-name-descrip h2,

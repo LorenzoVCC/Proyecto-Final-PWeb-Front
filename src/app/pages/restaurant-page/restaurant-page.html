@@ -27,9 +27,9 @@
 
             <div class="pills-plus">
                 <div class="categories-container-1">
-                    @for (c of categories; track c.Id_Category) {
-                    <category-pill [category]="c" (click)="selectCategory(c.Id_Category)"
-                        [class.selected]="selectedCategoryId === c.Id_Category"></category-pill>
+                    @for (cat of categories; track $index) {
+                    <category-pill [category]="cat" (click)="selectCategory(cat.Id_Category)"
+                        [class.selected]="selectedCategoryId === cat.Id_Category"></category-pill>
                     }
                     @empty
                     {
@@ -80,7 +80,7 @@
                 </div>
 
                 <div class="products-container-1">
-                    @for (p of getProductsForCategory(c.Id_Category); track p.id_Product) {
+                    @for (p of getProductsForCategoryView(c.Id_Category); track p.id_Product) {
                     <product-card [product]="p"></product-card>
                     }
                     @empty {

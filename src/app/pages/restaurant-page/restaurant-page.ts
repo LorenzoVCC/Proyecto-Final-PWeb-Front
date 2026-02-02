@@ -48,7 +48,7 @@ export class RestaurantPage implements OnInit {
   async ngOnInit() {
     this.cargandoRestaurant = true;
 
-    const idNum = Number(this.id()); 
+    const idNum = Number(this.id());
     if (Number.isNaN(idNum)) {
       this.cargandoRestaurant = false;
       return;
@@ -57,11 +57,12 @@ export class RestaurantPage implements OnInit {
     this.restaurant = await this.restaurantService.getById(idNum) ?? undefined;
 
     if (this.restaurant) {
-      this.categories = this.categoryService.getByRestaurantId(this.restaurant.id);
+      this.categories = await this.categoryService.getByRestaurantId(this.restaurant.id);
+
     } else {
       this.categories = [];
     }
-    
+
     this.selectedCategoryId = null;
     this.cargandoRestaurant = false;
   }
@@ -81,20 +82,18 @@ export class RestaurantPage implements OnInit {
   }
 
   //Borrado
-  deleteSelectedCategory() {
+  async deleteSelectedCategory() {
     if (!this.restaurant) return;
-
     if (this.selectedCategoryId === null) return;
 
-    const cat = this.categoryService.getById(this.selectedCategoryId);
+    const cat = await this.categoryService.getById(this.selectedCategoryId);
     if (!cat) return;
     if (cat.Id_Restaurant !== this.restaurant.id) return;
 
-    const deleted = this.categoryService.deleteCategory(this.selectedCategoryId);
+    const deleted = await this.categoryService.deleteCategory(this.selectedCategoryId);
     if (!deleted) return;
 
-    this.categories = this.categoryService.getByRestaurantId(this.restaurant.id);
-
+    this.categories = await this.categoryService.getByRestaurantId(this.restaurant.id);
     this.selectedCategoryId = null;
   }
 
@@ -107,4 +106,9 @@ export class RestaurantPage implements OnInit {
   getProductsForCategory(categoryId: number) {  //Trae los productos de esa categoria
     return this.productService.getByCategoryId(categoryId);
   }
+
+  getProductsForCategoryView(categoryId: number) {
+    return this.productService.getCachedByCategoryId(categoryId);
+  }
+
 }

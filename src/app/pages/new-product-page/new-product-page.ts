@@ -29,7 +29,6 @@ export class NewProductPage implements OnInit {
   //Paso los parametros recibidos por la URL a las variables restaurantId y categoryId
   restaurantId = input.required<string>();
   categoryId = input.required<string>();
-  //Para edit
   productId = input<string | null>(null);
 
   isEdit = false;
@@ -40,7 +39,7 @@ export class NewProductPage implements OnInit {
   errorEnBack = false;
   solicitudABackEnCurso = false;
 
-  ngOnInit() {
+  async ngOnInit() {
     const loggedRestaurant = this.auth.restaurantId;
     if (!loggedRestaurant) {
       this.router.navigate(['/login'])
@@ -61,7 +60,7 @@ export class NewProductPage implements OnInit {
       return;
     }
 
-    const cat = this.categoryService.getById(urlCategoryId);
+    const cat = await this.categoryService.getById(urlCategoryId);
     if (!cat || cat.Id_Restaurant !== urlRestaurantId) {
       this.router.navigate(['/restaurant-page', urlRestaurantId]);
       return;
@@ -74,7 +73,7 @@ export class NewProductPage implements OnInit {
     const prodId = Number(productIdx);
     if (Number.isNaN(prodId)) return;
 
-    const prod = this.productService.getById(prodId);
+    const prod = await this.productService.getById(prodId);
     if (!prod) return;
 
     if (prod.id_Category !== urlCategoryId) {
@@ -96,25 +95,13 @@ export class NewProductPage implements OnInit {
     }, 0);
   }
 
-  handleFormSubmission(form: NgForm) {
+  async handleFormSubmission(form: NgForm) {
+
     this.errorEnBack = false;
     this.solicitudABackEnCurso = true;
 
-    const loggedRestaurant = this.auth.restaurantId;
-    if (!loggedRestaurant) {
-      this.solicitudABackEnCurso = false;
-      this.router.navigate(['/login']);
-      return;
-    }
-
     const urlRestaurantId = Number(this.restaurantId());
     const urlCategoryId = Number(this.categoryId());
-
-    if (Number.isNaN(urlRestaurantId) || Number.isNaN(urlCategoryId)) {
-      this.solicitudABackEnCurso = false;
-      this.errorEnBack = true;
-      return;
-    }
 
     const dto: ProductForCreateUpdateDTO = {
       name: form.value.name ?? '',
@@ -132,25 +119,27 @@ export class NewProductPage implements OnInit {
     }
 
     if (this.isEdit) {
-      const productIdx = this.productId() ? Number(this.productId()) : NaN;
-      if (Number.isNaN(productIdx)) {
-        this.solicitudABackEnCurso = false;
+      const productIdx = this.productId();
+      const prodId = productIdx ? Number(productIdx) : NaN;
+
+      if (Number.isNaN(prodId)) {
         this.errorEnBack = true;
+        this.solicitudABackEnCurso = false;
         return;
       }
 
-      const updated = this.productService.updateProduct(productIdx, dto);
+      const updated = await this.productService.updateProduct(prodId, dto);
       this.solicitudABackEnCurso = false;
 
       if (!updated) {
         this.errorEnBack = true;
         return;
       }
-      this.router.navigate(['/product-page', updated.id_Product]);
+      this.router.navigate(['/restaurant-page', urlRestaurantId]);
       return;
     }
 
-    const created = this.productService.createProduct(dto);
+    const created = await this.productService.createProduct(dto);
     this.solicitudABackEnCurso = false;
 
     if (!created) {
@@ -159,7 +148,6 @@ export class NewProductPage implements OnInit {
     }
 
     form.resetForm();
-    //Volvemo pa' tra...
     this.router.navigate(['/restaurant-page', urlRestaurantId]);
   }
 }
