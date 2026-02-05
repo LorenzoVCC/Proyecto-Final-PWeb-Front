@@ -27,6 +27,7 @@
 
             <div class="pills-plus">
                 <div class="categories-container-1">
+                    
                     @for (cat of categories; track $index) {
                     <category-pill [category]="cat" (click)="selectCategory(cat.Id_Category)"
                         [class.selected]="selectedCategoryId === cat.Id_Category"></category-pill>

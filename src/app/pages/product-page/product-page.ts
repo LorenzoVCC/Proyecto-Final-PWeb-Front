@@ -29,6 +29,7 @@ export class ProductPage implements OnInit {
   product: ProductForReadDTO | null = null;
   restaurantBack: number | null = null;
   canEdit = false;
+  errorEnBack = false;
 
   async ngOnInit() {
     const id = Number(this.id());
@@ -42,10 +43,10 @@ export class ProductPage implements OnInit {
     const categ = await this.categoryService.getById(prodId.id_Category);
     this.restaurantBack = categ?.Id_Restaurant ?? null;
 
-    this.canEdit = 
-    !!this.auth.token && 
-    this.restaurantBack !== null && 
-    this.auth.restaurantId === this.restaurantBack;
+    this.canEdit =
+      !!this.auth.token &&
+      this.restaurantBack !== null &&
+      this.auth.restaurantId === this.restaurantBack;
   }
 
   backMenu() {
@@ -71,10 +72,54 @@ export class ProductPage implements OnInit {
   }
 
   //Metodos fuera de CRUD
-    getDiscountPrice(): number {
-      if (!this.product) return 0;
-      const descuentoPorcentaje = this.product.discount ?? 0;
-      return this.product.price - (this.product.price * descuentoPorcentaje / 100);
+  
+  async changeDiscount() {
+    if (!this.canEdit || !this.product) return;
+
+    const current = this.product.discount ?? 0;
+
+    const value = prompt("Nuevo descuento (%)", String(current));
+    if (value === null) return;
+
+    const discount = Number(value);
+
+    if (Number.isNaN(discount) || discount < 0 || discount > 90) {
+      alert("Descuento inválido. Usá un número entre 0 y 90.");
+      return;
+    }
+
+    const ok = await this.productService.updateDiscount(
+      this.product.id_Product,
+      discount
+    );
+    
+    if (!ok) {
+      this.errorEnBack = true;
+      return;
+    }
+    
+    // reflejo inmediato en UI
+    this.product.discount = discount;
+  }
+  
+  async toggleHappyHour() {
+    if (!this.product) return;
+
+    const ok = await this.productService.toggleHappyHour(
+      this.product.id_Product
+    );
+
+    if (!ok) {
+      this.errorEnBack = true;
+      return;
+    }
+    this.product.happyHour = !this.product.happyHour;;
   }
 
+  getDiscountPrice(): number {
+    if (!this.product) return 0;
+    const descuentoPorcentaje = this.product.discount ?? 0;
+    return this.product.price - (this.product.price * descuentoPorcentaje / 100);
+  }
+  
 }

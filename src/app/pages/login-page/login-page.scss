@@ -140,9 +140,15 @@ input:-webkit-autofill:active {
     transition: .3s;
 }
 
-#ingresar:hover , .registrate:hover{
+#ingresar:hover {
     background-color: var(--cream);
     box-shadow: 0px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    border: none;
+}
+
+.registrate:hover {
+    background-color: var(--cream);
+    box-shadow: 0px 5px 5px  rgba(0, 0, 0, 0.75);
     border: none;
 }
 

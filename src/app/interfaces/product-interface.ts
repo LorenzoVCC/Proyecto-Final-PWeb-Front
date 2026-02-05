@@ -1,10 +1,12 @@
 export interface ProductForReadDTO {
   id_Product: number;
   name: string;
-  description?: string;
+  description: string;
   price: number;
-  discount?: number;
-  urlImage?: string;
+  discount: number;  
+  happyHour: boolean;   
+  isFeatured: boolean;   
+  urlImage: string;
   id_Category: number;
 }
 
@@ -15,4 +17,8 @@ export interface ProductForCreateUpdateDTO {
   discount?: number;
   urlImage?: string;
   id_Category: number;
+}
+
+export interface ProductDiscountDTO {
+  discount: number;
 }

@@ -129,9 +129,22 @@ export class NewProductPage implements OnInit {
       }
 
       const updated = await this.productService.updateProduct(prodId, dto);
+    
+      if (!updated) {
+        this.errorEnBack = true;
+        this.solicitudABackEnCurso = false;
+        return;
+      }
+
+      const discount = form.value.discount === '' || form.value.discount == null
+        ? 0
+        : Number(form.value.discount);
+
+      const okDiscount = await this.productService.updateDiscount(prodId, discount);
+
       this.solicitudABackEnCurso = false;
 
-      if (!updated) {
+      if (!okDiscount) {
         this.errorEnBack = true;
         return;
       }

@@ -2,35 +2,45 @@
     <div class="back-to-menu-btn">
         <button class="button" type="button" (click)="backMenu()">
             <img src="/back-to-menu.svg" alt=""></button>
-        </div>
-        
-        <div class="produc-data-btns">
-            
-            <article class="product-data-container">
-                
-                <div class="product-img-container">
-                    <img [src]="product?.urlImage || 'assets/restaurant-generic-img.jpg'" alt="imagen-producto" />
-                </div>
-                
-                <div class="product-name-descrip">
-                    <h2> {{ product?.name }}</h2>
-                    <p> {{ product?.description }} </p>
-                    
-                    <div class="product-price-discount">
-                    <h4> ${{ product?.price }} </h4>
-                    
-                    @if ((product?.discount ?? 0) > 0 ) {
-                        <h4><span>${{ getDiscountPrice() }}</span></h4>
+    </div>
+
+    <div class="produc-data-btns">
+
+        <article class="product-data-container">
+
+            <div class="product-img-container">
+                <img [src]="product?.urlImage || 'assets/restaurant-generic-img.jpg'" alt="imagen-producto" />
+            </div>
+
+            <div class="product-name-descrip">
+                <h2> {{ product?.name }}</h2>
+                <p> {{ product?.description }} </p>
+
+                <div class="product-price-discount">
+
+                    <h4 class="original-price" [class.tachado]="product?.happyHour && (product?.discount ?? 0) > 0">
+                        ${{ product?.price }}
+                    </h4>
+
+                    @if (product?.happyHour && (product?.discount ?? 0) > 0) {
+                    <h4>Happy Hour <span>${{ getDiscountPrice() }} </span></h4>
                     }
+
                 </div>
-                
+
+
             </div>
         </article>
 
         @if (canEdit) {
         <div class="owner-options">
+
+            <button type="button" (click)="toggleHappyHour()" [class.hh-active]="product?.happyHour">
+            {{ product?.happyHour ? 'Happy Hour ON' : 'Happy Hour OFF' }} </button>
+            
             <button type="button" (click)="editProduct()">Editar</button>
             <button type="button" (click)="deleteProduct()">Eliminar</button>
         </div> }
+
     </div>
 </div>

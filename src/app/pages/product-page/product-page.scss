@@ -108,8 +108,13 @@
     font-size: 1.5em;
 }
 
-span {
-    background-color: var(--cream);
+.tachado {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.product-price-discount span {
+    background-color: var(--primary);
     padding: 5px 10px;
     border-radius: 20px;
 }
@@ -125,8 +130,13 @@ span {
     width: 10em;
     border-radius: 12px;
     background-color: var(--primary);
-    transition: .3s;
+    transition: .6s;
 }
 .owner-options button:hover {
     background-color: var(--phover);
+}
+.owner-options button.hh-active {
+  background-color: var(--phover);
+  border: 2px solid black;
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.15);
 }

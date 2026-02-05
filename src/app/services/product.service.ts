@@ -17,6 +17,8 @@ export class ProductService {
       name: p.name ?? p.Name ?? '',
       description: p.description ?? p.Description ?? '',
       price: p.price ?? p.Price ?? 0,
+      happyHour: p.happyHour ?? p.HappyHour ?? false,
+      isFeatured: p.isFeatured ?? p.IsFeatured ?? false,
       discount: p.discount ?? p.Discount ?? 0,
       urlImage: p.urlImage ?? p.UrlImage ?? '',
       id_Category: p.id_Category ?? p.Id_Category ?? p.idCategory ?? 0,
@@ -52,7 +54,10 @@ export class ProductService {
       return [];
     }
 
-    if (!res.ok) return [];
+    if (!res.ok) {
+      this.deleteByCategoryId(categoryId);
+      return [];
+    }
 
     const data = await res.json();
     const list = data.map((p: any) => this.mapProduct(p));
@@ -63,9 +68,17 @@ export class ProductService {
     ];
     return list;
   }
+  /////////////////////
+  deleteByCategoryId(categoryId: number): void {
+    this.products = this.products.filter(p => p.id_Category !== categoryId);
+  }
+
+  getCachedByCategoryId(categoryId: number) {
+    return this.products.filter(p => p.id_Category === categoryId);
+  }
   ///////////////////
   async createProduct(dto: ProductForCreateUpdateDTO) {
-    const payload: any = {
+    const payload = {
       name: dto.name,
       description: dto.description,
       price: dto.price,
@@ -102,7 +115,6 @@ export class ProductService {
       name: dto.name,
       description: dto.description,
       price: dto.price,
-      discount: dto.discount,
       urlImage: dto.urlImage,
       id_Category: dto.id_Category,
     };
@@ -123,23 +135,10 @@ export class ProductService {
 
     if (!res.ok) return null;
 
-    this.products = this.products.map(old => {
-      if (old.id_Product === productId) {
-        return {
-          ...old,
-          name: dto.name,
-          description: dto.description,
-          price: dto.price,
-          discount: dto.discount,
-          urlImage: dto.urlImage,
-          id_Category: dto.id_Category,
-        };
-      }
-      return old;
-    });
-
-    return this.getById(productId);
+    return await this.getById(productId);
   }
+
+
   /////////////////// 
   async deleteProduct(productId: number) {
     const res = await fetch(`${this.URL_BASE}/${productId}`, {
@@ -157,12 +156,54 @@ export class ProductService {
     this.products = this.products.filter(p => p.id_Product !== productId);
     return true;
   }
-  ///////////////////
-  deleteByCategoryId(categoryId: number): void {
-    this.products = this.products.filter(p => p.id_Category !== categoryId);
+
+  //Happy Hour
+  async updateDiscount(productId: number, discount: number) {
+
+    const res = await fetch(`${this.URL_BASE}/${productId}/discount`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.auth.token,
+      },
+      body: JSON.stringify({ discount }),
+    });
+
+    if (res.status === 401) {
+      this.auth.logout();
+      return false;
+    }
+
+    if (!res.ok) return false;
+    this.products = this.products.map(p =>
+      p.id_Product === productId ? { ...p, discount } : p
+    );
+    return true;
   }
 
-  getCachedByCategoryId(categoryId: number) {
-    return this.products.filter(p => p.id_Category === categoryId);
+  async toggleHappyHour(productId: number) {
+
+    const res = await fetch(`${this.URL_BASE}/${productId}/toggle-happyhour`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: 'Bearer ' + this.auth.token,
+      },
+    });
+
+    if (res.status === 401) {
+      this.auth.logout();
+      return false;
+    }
+
+    if (!res.ok) return false;
+
+    this.products = this.products.map(p =>
+      p.id_Product === productId
+        ? { ...p, happyHour: !p.happyHour }
+        : p
+    );
+
+    return true;
   }
 }
+

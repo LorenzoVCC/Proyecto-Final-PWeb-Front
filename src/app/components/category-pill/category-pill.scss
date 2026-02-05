@@ -5,12 +5,18 @@
 }
 
 .category-pill {
-    background-color: var(--primary);
-    border-radius: 99px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background-color: var(--primary);
+  transition: all 0.2s ease;
+  font-weight: 700;
+  transition: .5s;
+  cursor: pointer;
+}
 
-    padding: 10px 20px;
-    box-sizing: border-box;
-    transition: .3s;
+:host(.selected) .category-pill {
+  background-color: var(--phover);    
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, .8);
 }
 
 .category-pill:hover {

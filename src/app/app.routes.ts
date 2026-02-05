@@ -69,7 +69,7 @@ export const routes: Routes = [
       {
         path: "product-page/:id",
         component: ProductPage,
-        canActivate: [ownerGuard],
+        canActivate: [ownerGuard],        
       },
     ],
   },

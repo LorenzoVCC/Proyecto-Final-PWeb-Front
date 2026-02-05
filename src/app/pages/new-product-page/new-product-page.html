@@ -7,7 +7,7 @@
 
             <div class="product-field">
                 <label for="name">Nombre *</label>
-                 <input id="name" type="text" name="name" ngModel required />
+                <input id="name" type="text" name="name" ngModel required />
             </div>
 
             <div class="product-field-full">
@@ -20,10 +20,12 @@
                 <input id="price" type="number" name="price" ngModel required />
             </div>
 
+            @if (isEdit) {
             <div class="product-field">
                 <label for="discount">Descuento (%)</label>
                 <input id="discount" type="number" name="discount" ngModel />
             </div>
+            }
 
             <div class="product-field">
                 <label for="urlImage">Imagen (URL)</label>
