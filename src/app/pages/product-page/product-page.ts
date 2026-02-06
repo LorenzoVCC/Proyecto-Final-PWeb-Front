@@ -5,7 +5,7 @@ import { Auth } from '../../services/auth-service';
 
 import { CategoryService } from '../../services/category-service';
 
-import { ProductService } from '../../services/product.service';
+import { ProductService } from '../../services/product-service';
 import { ProductForReadDTO } from '../../interfaces/product-interface';
 
 @Component({

@@ -1,27 +1,45 @@
 @font-face {
-  font-family: 'nexa';
-  src: url("/src/fonts/nexa/Nexa-ExtraLight.ttf") format('truetype');
+  font-family: 'bqfont';
+  src: url('/assets/fonts/BurgerQueen.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
-
 :root {
+
+    //Colores light-mode
     --primary: #e82020;
     --phover: #e16f6f;
     --cream: #f0f0dd;
     --secondary: #e2e4d1;
-    
     --bgwhite: #f0ebe1;
-
     --featured: gold;
     --hh: rgb(237, 164, 38);
 
+    --bqfont: 'bqfont', sans-serif;
     --font-sans: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --nexa: "nexa", sans-serif;
-    
+
     --header-h: 130px;
 }
+
+body.theme-dark {
+    --d-primary: #740c0c;
+    --d-phover: #a40a0a;
+    --d-cream: #3e3e2f;
+    --d-secondary: #2f2f25;
+    --d-bgwhite: #1c1c1c;
+    --d-featured: #b8860b;
+    --d-hh: rgb(180, 101, 21);
+
+    --bqfont: 'bqfont', sans-serif;
+    --font-sans: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --nexa: "nexa", sans-serif;
+
+    --header-h: 130px;
+}
+
 
 body {
     font-family: var(--font-sans);

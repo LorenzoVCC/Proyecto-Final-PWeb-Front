@@ -1,8 +1,18 @@
+body {
+    margin: 0;
+    height: 100bh;
+}
+
 .layout {
     min-height: 100vh;
     margin: 0;
     background-color:var(--cream);
+    transition: 1s;
 }
-body {
-    margin: 0;
+
+/* Dark */
+:host-context(.theme-dark) .layout {
+ background-color:var(--d-phover);
+  color: #f4f2e8;
+  transition: 1s;
 }

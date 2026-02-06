@@ -5,7 +5,7 @@ import { RestaurantService } from '../../services/restaurant-service';
 import { RestaurantForReadDTO } from '../../interfaces/restaurant-interface';
 
 import { ProductCard } from '../../components/product-card/product-card';
-import { ProductService } from '../../services/product.service';
+import { ProductService } from '../../services/product-service';
 
 import { CategoryPill } from '../../components/category-pill/category-pill';
 import { CategoryService } from '../../services/category-service';

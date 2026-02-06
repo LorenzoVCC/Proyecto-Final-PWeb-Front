@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { CategoryCreateUpdateDTO, CategoryForReadDTO } from '../interfaces/category-interface';
-import { ProductService } from './product.service';
+import { ProductService } from './product-service';
 import { Auth } from './auth-service';
 import { API_URL } from '../config/api';
 

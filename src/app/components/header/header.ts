@@ -3,7 +3,7 @@ import { RouterLink, Router } from "@angular/router";
 import { Auth } from '../../services/auth-service';
 import { CommonModule } from '@angular/common';
 import { RestaurantService } from '../../services/restaurant-service';
-
+import { ThemeService } from '../../services/theme-service';
 
 @Component({
   selector: 'app-header',
@@ -14,6 +14,8 @@ import { RestaurantService } from '../../services/restaurant-service';
 })
 
 export class Header {
+
+  theme = inject(ThemeService);
   auth = inject(Auth);
   restaurantService = inject(RestaurantService);
   router = inject(Router);
@@ -38,6 +40,10 @@ export class Header {
 
     this.auth.logout();
     this.router.navigate(['/']);
+  }
+
+  toggleTheme() {
+    this.theme.toggle();
   }
 
 }
