@@ -15,9 +15,10 @@
                 <label for="name">Nombre de tu Restaurante<span>*</span></label>
                 <input id="name" name="name" ngModel required autocomplete="name" #name="ngModel">
 
-                @if (name.invalid && !name.pristine) {
+                @if (name.invalid && registerForm.submitted) {
                 <p class="error">Debe colocar un Nombre.</p>
                 }
+
             </div>
 
             <!-- //////////////////////////////////////////// -->
@@ -27,21 +28,49 @@
                     <label for="email">Correo electrónico<span>*</span></label>
                     <input id="email" name="email" type="email" [required]="!isEdit" ngModel #email="ngModel"
                         autocomplete="email">
+
+                    @if (email.invalid && registerForm.submitted) {
+
+                    @if (email.errors?.['required']) {
+                    <p class="error">Debe ingresar un correo electrónico.</p>
+                    }
+
+                    @if (email.errors?.['email']) {
+                    <p class="error">Debe ingresar un correo electrónico válido.</p>
+                    }
+
+                    }
+
                 </div>
 
                 <div class="inputs-container-individual">
                     <label for="password">Contraseña<span>*</span></label>
                     <input id="password" name="password" type="password" [required]="!isEdit" ngModel
                         #password="ngModel" minlength="4" autocomplete="new-password">
+
+                    @if (password.invalid && registerForm.submitted) {
+
+                    @if (password.errors?.['required']) {
+                    <p class="error">Debe ingresar una clave.</p>
+                    }
+
+                    @if (password.errors?.['minlength']) {
+                    <p class="error">La clave debe tener al menos 4 caracteres.</p>
+                    }
+
+                    }
+
                 </div>
 
                 <div class="inputs-container-individual">
                     <label for="password2">Repite tu Contraseña<span>*</span></label>
                     <input id="password2" name="password2" type="password" [required]="!isEdit" ngModel
                         #password2="ngModel" minlength="4" autocomplete="new-password">
+
+                    @if (password2.value !== password.value) {
+                        <p class="error">Las contraseñas deben coincidir.</p>
+                    }
                 </div>
-
-
             </div>
             <!-- //////////////////////////////////////////// -->
 
@@ -65,22 +94,31 @@
                 <label for="address">Dirección<span>*</span></label>
                 <input id="address" name="address" ngModel autocomplete="address" #address="ngModel" required>
 
-                @if (address.invalid && !address.pristine) {
+                @if (address.invalid && registerForm.submitted) {
                 <p class="error">Debe colocar una dirección.</p>
                 }
             </div>
 
             <div class="inputs-container-individual">
-                <label for="slug">Identificador por Nombre</label>
-                <input id="slug" name="slug" ngModel autocomplete="slug" #slug="ngModel">
+                <label for="slug">Identificador por Nombre<span>*</span></label>
+                <input id="slug" name="slug" ngModel autocomplete="slug" #slug="ngModel" required="">
+
+
+                @if (slug.invalid && registerForm.submitted) {
+                <p class="error">Debe colocar un identificador válido.</p>
+                }
             </div>
 
         </section>
 
         <div class="btn-container">
-            <button id="agregar" type="submit" [disabled]="registerForm.invalid">
+            <button id="agregar" type="submit">
                 {{ isEdit ? 'Guardar Cambios' : 'Registrarse' }}
             </button>
+
+            @if (registerForm.invalid && registerForm.submitted) {
+            <p class="errorSubmit">Por favor, complete todos los campos requeridos correctamente.</p>
+            }
 
             @if (!isEdit) {
             <p>Ya tenés cuenta? <a routerLink="/login">Inicia sesion</a></p>

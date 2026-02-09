@@ -23,11 +23,9 @@ export class LoginPage {
   errorlogin = false;
 
   async login(form:NgForm) {
-
-    console.log(form.value)
     this.errorlogin = false;
     
-    if (!form.value.email || !form.value.password)
+    if (form.invalid)
     {
       this.errorlogin = true;
       return
@@ -40,13 +38,10 @@ export class LoginPage {
     if (loginResult)
     {
       const id = this.auth.restaurantId;
-      if (id) {
-      this.router.navigate(['/restaurant-page', id]);
-      } else {
-        this.router.navigate(['/']);
-      }
+      this.router.navigate(id ? ['/restaurant-page', id] : ['/']);
       return;
     } 
+    
     this.errorlogin = true;
   }
 }

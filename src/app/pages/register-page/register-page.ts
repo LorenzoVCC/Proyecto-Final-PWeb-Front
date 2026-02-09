@@ -59,6 +59,8 @@ export class RegisterPage implements OnInit {
   async handleFormSubmission(form: NgForm) {
     this.errorEnBack = false;
     this.solicitudABackEnCurso = true;
+  
+    if (form.invalid) return;
 
     if (!this.isEdit) {
       const dto: RestaurantForCreateDTO = {

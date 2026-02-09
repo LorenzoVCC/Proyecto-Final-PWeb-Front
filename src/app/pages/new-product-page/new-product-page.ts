@@ -98,6 +98,7 @@ export class NewProductPage implements OnInit {
   async handleFormSubmission(form: NgForm) {
 
     this.errorEnBack = false;
+    if (form.invalid) return;  
     this.solicitudABackEnCurso = true;
 
     const urlRestaurantId = Number(this.restaurantId());

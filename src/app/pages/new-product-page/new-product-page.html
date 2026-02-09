@@ -6,8 +6,14 @@
         <section id="product-data-container">
 
             <div class="product-field">
-                <label for="name">Nombre *</label>
-                <input id="name" type="text" name="name" ngModel required />
+                <label for="name">Nombre<span>*</span></label>
+                <input id="name" type="text" name="name" ngModel #name="ngModel" required />
+
+
+                @if (name.invalid && newProductForm.submitted) {
+                @if (name.errors?.['required']) { <p class="error">Nombre obligatorio.</p> }
+                @if (name.errors?.['minlength']) { <p class="error">Mínimo 2 caracteres.</p> }
+                }
             </div>
 
             <div class="product-field-full">
@@ -15,9 +21,15 @@
                 <textarea id="description" rows="4" name="description" ngModel></textarea>
             </div>
 
+
             <div class="product-field">
                 <label for="price">Precio *</label>
-                <input id="price" type="number" name="price" ngModel required />
+                <input id="price" type="number" name="price" ngModel #price="ngModel" required min="1" />
+
+                @if (price.invalid && newProductForm.submitted) {
+                @if (price.errors?.['required']) { <p class="error">Precio obligatorio.</p> }
+                @if (price.errors?.['min']) { <p class="error">El precio debe ser mayor a 0.</p> }
+                }
             </div>
 
             @if (isEdit) {

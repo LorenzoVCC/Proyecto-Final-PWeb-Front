@@ -3,20 +3,23 @@
   <form #newCategoryForm="ngForm" (ngSubmit)="handleFormSubmission(newCategoryForm)">
 
     <h1>Ingrese el nombre de su categoría</h1>
-    
+
     <div class="data-input-container">
       <label for="name">Nombre:</label>
-      <input
-        id="name"
-        name="name"
-        type="text"
-        ngModel
-        required
-      >
+      <input id="name" name="name" type="text" ngModel #name="ngModel" required>
+
+      @if (name.invalid && newCategoryForm.submitted) {
+      <p class="error">Debe colocar un Nombre.</p>
+      }
     </div>
 
     <div class="btn-newcat">
-      <button type="submit">Aceptar</button>
+      <button type="submit" [disabled]="solicitudABackEnCurso">Aceptar</button>
+
+      @if (errorEnBack) {
+      <p class="error">Ocurrió un error. Verificá los datos e intentá nuevamente.</p>
+      }
+
     </div>
 
   </form>

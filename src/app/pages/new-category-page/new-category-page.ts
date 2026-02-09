@@ -64,6 +64,8 @@ export class NewCategoryPage implements OnInit {
 
   async handleFormSubmission(form: NgForm) {
     this.errorEnBack = false;
+    if (form.invalid) return;
+
     this.solicitudABackEnCurso = true;
 
     const loggedRestaurantId = this.auth.restaurantId;
