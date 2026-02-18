@@ -1,31 +1,31 @@
-<article class="product-card" [routerLink]="['/product-page', product().id_Product]"
-    [ngClass]="{ 'card-hh': product().happyHour, 'card-featured': product().isFeatured && !product().happyHour }">
+<article class="product-card"
+  [class.compact]="compact()"
+  [routerLink]="['/product-page', product().id_Product]"
+  [ngClass]="{ 'card-hh': product().happyHour, 'card-featured': product().isFeatured && !product().happyHour }">
 
+  <div class="img-product-container">
+    <img [src]="product().urlImage || '/assets/imgs/restaurant-generic-img.jpg'" alt="imagen-producto" />
+  </div>
 
-    <div class="img-product-container">
-        <img [src]="product().urlImage || '/assets/imgs/restaurant-generic-img.jpg'" alt="imagen-producto" />
-    </div>
+  <div class="product-card-text-container">
+    <h2>{{ product().name }}</h2>
 
-    <div class="product-card-text-container">
+    @if (!compact() && product().isFeatured) {
+      <div class="featured-sign">
+        <span class="featuredProduct">Destacado ⭐</span>
+      </div>
+    }
+  </div>
 
-        <h2> {{product().name}} </h2>
-
-        @if (product().isFeatured) {
-        <div class="featured-sign">
-            <span class="featuredProduct">Destacado ⭐</span>
-        </div>
-        }
-
-    </div>
-
-
+  @if (!compact()) {
     <div class="price-container">
-        <h4 [class.tachado]="product().happyHour && (product().discount) > 0">
-            ${{ product().price }}
-        </h4>
+      <h4 [class.tachado]="product().happyHour && (product().discount) > 0">
+        ${{ product().price }}
+      </h4>
 
-        @if (product().happyHour && (product().discount) > 0) {
+      @if (product().happyHour && (product().discount) > 0) {
         <h4>HH <span>${{ getDiscountPrice() }}</span></h4>
-        }
+      }
     </div>
+  }
 </article>

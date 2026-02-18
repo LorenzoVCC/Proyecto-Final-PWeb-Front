@@ -278,5 +278,19 @@ export class ProductService {
     const data = await res.json();
     return data.map((p: any) => this.mapProduct(p));
   }
+
+  async getFeaturedByRestaurant(restaurantId: number) {
+    const res = await fetch(`${this.URL_BASE}/featured?restaurantId=${restaurantId}`, {
+      method: 'GET',
+      headers: { Authorization: 'Bearer ' + this.auth.token },
+    });
+
+    if (res.status === 401) { this.auth.logout(); return []; }
+    if (!res.ok) return [];
+
+    const data = await res.json();
+    return data.map((p: any) => this.mapProduct(p));
+  }
+
 }
 

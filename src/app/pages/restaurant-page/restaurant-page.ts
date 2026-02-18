@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, Input, OnInit } from '@angular/core';
 import { RouterLink, Router } from "@angular/router";
 import { FormsModule } from '@angular/forms';
 
@@ -46,7 +46,10 @@ export class RestaurantPage implements OnInit {
   searching = false;
 
   searchResults: ProductForReadDTO[] = [];
-  featuredResults: ProductForReadDTO[] = [];
+
+  featuredProducts: ProductForReadDTO[] = [];
+
+  @Input() compact = false;
 
   private searchTimeout: any = null;
   private searchRequestId = 0;
@@ -70,7 +73,6 @@ export class RestaurantPage implements OnInit {
 
     this.searching = false;
     this.searchResults = [];
-    this.featuredResults = [];
     clearTimeout(this.searchTimeout);
 
     this.filtersOpen = false;
@@ -91,7 +93,6 @@ export class RestaurantPage implements OnInit {
     if (!this.hasAnyFilterApplied()) {
       this.searching = false;
       this.searchResults = [];
-      this.featuredResults = [];
       this.filtersOpen = false;
       return;
     }
@@ -109,10 +110,7 @@ export class RestaurantPage implements OnInit {
     });
 
     if (reqId !== this.searchRequestId) return;
-
     this.searchResults = results;
-    this.featuredResults = [];
-
 
     this.searching = true;
     this.filtersOpen = false;
@@ -133,7 +131,6 @@ export class RestaurantPage implements OnInit {
     if (noFilters) {
       this.searching = false;
       this.searchResults = [];
-      this.featuredResults = [];
       clearTimeout(this.searchTimeout);
       return;
     }
@@ -145,7 +142,7 @@ export class RestaurantPage implements OnInit {
       const reqId = ++this.searchRequestId;
 
       const results = await this.productService.searchProducts({
-        // restaurantId: this.restaurant.id,
+        restaurantId: this.restaurant.id,
         q: this.searchText?.trim() || undefined,
         categoryId: this.selectedCategoryId ?? undefined,
         featured: this.onlyFeatured ? true : undefined,
@@ -161,8 +158,6 @@ export class RestaurantPage implements OnInit {
     }, 300);
   }
 
-
-
   async ngOnInit() {
     this.cargandoRestaurant = true;
 
@@ -176,6 +171,8 @@ export class RestaurantPage implements OnInit {
     this.restaurant = await this.restaurantService.getById(idNum) ?? undefined;
 
     if (this.restaurant) {
+      this.featuredProducts = await this.productService.getFeaturedByRestaurant(this.restaurant.id);
+
       this.categories = await this.categoryService.getByRestaurantId(this.restaurant.id);
 
       for (const c of this.categories) {
@@ -183,6 +180,7 @@ export class RestaurantPage implements OnInit {
       }
     } else {
       this.categories = [];
+      this.featuredProducts = [];
     }
 
     this.selectedCategoryId = null;
@@ -190,7 +188,6 @@ export class RestaurantPage implements OnInit {
     this.searchText = '';
     this.searching = false;
     this.searchResults = [];
-    this.featuredResults = [];
     clearTimeout(this.searchTimeout);
 
     this.filtersOpen = false;
@@ -204,19 +201,27 @@ export class RestaurantPage implements OnInit {
 
   clearSelection() {
     this.selectedCategoryId = null;
-    if (this.searching) this.applyFilters();
+
+    if (!this.hasAnyFilterApplied()) {
+      this.searching = false;
+      this.searchResults = [];
+      return;
+    }
+
+    this.applyFilters();
   }
 
   selectCategory(categoryId: number) {
-    if (this.selectedCategoryId === categoryId) {
-      this.selectedCategoryId = null;
-    } else {
-      this.selectedCategoryId = categoryId;
+    this.selectedCategoryId =
+      this.selectedCategoryId === categoryId ? null : categoryId;
+
+    if (!this.hasAnyFilterApplied()) {
+      this.searching = false;
+      this.searchResults = [];
+      return;
     }
 
-    if (this.hasAnyFilterApplied()) {
-      this.applyFilters();
-    }
+    this.applyFilters();
   }
 
   async deleteSelectedCategory() {

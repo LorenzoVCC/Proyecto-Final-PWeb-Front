@@ -13,6 +13,7 @@ import { CommonModule } from "@angular/common";
 export class ProductCard {
 
   product = input.required<ProductForReadDTO>();
+  compact = input<boolean>(false);
 
   //Metodo para calcular descuento
   getDiscountPrice() {

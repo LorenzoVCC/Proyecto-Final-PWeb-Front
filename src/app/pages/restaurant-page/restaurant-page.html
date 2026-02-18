@@ -22,6 +22,21 @@
         </section>
         <!--  -->
 
+        @if (!searching && featuredProducts.length) {
+        <section class="container-for-featured">
+            <div class="category-header-featured">
+                <h2>⭐ Destacados ⭐</h2>
+            </div>
+
+            <div class="featured-container">
+                @for (p of featuredProducts; track p.id_Product) {
+                <product-card [product]="p" [compact]="true"></product-card>
+                }
+            </div>
+        </section>
+        }
+
+
         <!-- //////////////  PILLS   //////////////// -->
         <section id="categories-container-0">
 
@@ -82,12 +97,14 @@
             <div class="filters-dropdown">
                 <div class="row">
                     <label>Min</label>
-                    <input type="number" [(ngModel)]="minPrice" name="minPrice">
+                    <input type="number" [(ngModel)]="minPrice" name="minPrice"
+                        (ngModelChange)="minPrice = ($event === '' ? null : +$event)">
                 </div>
 
                 <div class="row">
                     <label>Max</label>
-                    <input type="number" [(ngModel)]="maxPrice" name="maxPrice">
+                    <input type="number" [(ngModel)]="maxPrice" name="maxPrice"
+                        (ngModelChange)="maxPrice = ($event === '' ? null : +$event)">
                 </div>
 
                 <div class="checkbox-row">
