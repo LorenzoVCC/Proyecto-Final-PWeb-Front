@@ -44,7 +44,6 @@ export class CategoryService {
     const list = data.map((c: any) => this.mapCategory(c));
     this.categories = list;
     return list;
-
   }
 
   async getById(id: number) {

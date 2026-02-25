@@ -14,7 +14,7 @@ import { CategoryService } from '../../services/category-service';
 import { CategoryForReadDTO } from '../../interfaces/category-interface';
 
 import Swal from 'sweetalert2';
-import { Toast } from '../../utils/modals.ts';
+import { Toast } from '../../utils/modals';
 
 import { Auth } from '../../services/auth-service';
 
@@ -25,6 +25,7 @@ import { Auth } from '../../services/auth-service';
   templateUrl: './restaurant-page.html',
   styleUrl: './restaurant-page.scss',
 })
+
 export class RestaurantPage implements OnInit {
 
   auth = inject(Auth);
@@ -41,30 +42,74 @@ export class RestaurantPage implements OnInit {
 
   categories: CategoryForReadDTO[] = [];
   selectedCategoryId: number | null = null;
-
+  
   searchText = '';
   searching = false;
-
+  
   searchResults: ProductForReadDTO[] = [];
-
+  
   featuredProducts: ProductForReadDTO[] = [];
-
+  
   @Input() compact = false;
-
+  
   private searchTimeout: any = null;
   private searchRequestId = 0;
-
+  
   filtersOpen = false;
-
+  
   minPrice: number | null = null;
   maxPrice: number | null = null;
   onlyFeatured = false;
   onlyHappyHour = false;
+  
+  async ngOnInit() {
+    this.cargandoRestaurant = true;
+
+    const idNum = Number(this.id());
+    if (Number.isNaN(idNum)) {
+      this.cargandoRestaurant = false;
+      return;
+    }
+
+    this.productService.products = [];
+    this.restaurant = await this.restaurantService.getById(idNum) ?? undefined;
+
+    if (this.restaurant) {
+      this.featuredProducts = await this.productService.getFeaturedByRestaurant(this.restaurant.id);
+
+      this.categories = await this.categoryService.getByRestaurantId(this.restaurant.id);
+
+      for (const c of this.categories) {
+        await this.productService.getByCategoryId(c.Id_Category);
+      }
+    } else {
+      this.categories = [];
+      this.featuredProducts = [];
+    }
+
+
+    //Reseteo filtros
+    this.selectedCategoryId = null;
+
+    this.searchText = '';
+    this.searching = false;
+    this.searchResults = [];
+    clearTimeout(this.searchTimeout);
+
+    this.filtersOpen = false;
+    this.minPrice = null;
+    this.maxPrice = null;
+    this.onlyFeatured = false;
+    this.onlyHappyHour = false;
+
+    this.cargandoRestaurant = false;
+    //Fin Reseteo filtros
+  }
 
   toggleFilters() {
     this.filtersOpen = !this.filtersOpen;
   }
-
+  
   clearFilters() {
     this.minPrice = null;
     this.maxPrice = null;
@@ -158,46 +203,6 @@ export class RestaurantPage implements OnInit {
     }, 300);
   }
 
-  async ngOnInit() {
-    this.cargandoRestaurant = true;
-
-    const idNum = Number(this.id());
-    if (Number.isNaN(idNum)) {
-      this.cargandoRestaurant = false;
-      return;
-    }
-
-    this.productService.products = [];
-    this.restaurant = await this.restaurantService.getById(idNum) ?? undefined;
-
-    if (this.restaurant) {
-      this.featuredProducts = await this.productService.getFeaturedByRestaurant(this.restaurant.id);
-
-      this.categories = await this.categoryService.getByRestaurantId(this.restaurant.id);
-
-      for (const c of this.categories) {
-        await this.productService.getByCategoryId(c.Id_Category);
-      }
-    } else {
-      this.categories = [];
-      this.featuredProducts = [];
-    }
-
-    this.selectedCategoryId = null;
-
-    this.searchText = '';
-    this.searching = false;
-    this.searchResults = [];
-    clearTimeout(this.searchTimeout);
-
-    this.filtersOpen = false;
-    this.minPrice = null;
-    this.maxPrice = null;
-    this.onlyFeatured = false;
-    this.onlyHappyHour = false;
-
-    this.cargandoRestaurant = false;
-  }
 
   clearSelection() {
     this.selectedCategoryId = null;

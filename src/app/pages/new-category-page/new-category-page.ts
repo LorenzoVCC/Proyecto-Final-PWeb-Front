@@ -64,7 +64,6 @@ export class NewCategoryPage implements OnInit {
   async handleFormSubmission(form: NgForm) {
     this.errorEnBack = false;
     if (form.invalid) return;
-
     this.solicitudABackEnCurso = true;
 
     const loggedRestaurantId = this.auth.restaurantId;
@@ -81,16 +80,20 @@ export class NewCategoryPage implements OnInit {
       return;
     }
 
+    //lo paso a updated
     const dto: CategoryCreateUpdateDTO = { Name: (form.value.name ?? '').trim() };
     if (!dto.Name) {
       this.solicitudABackEnCurso = false;
       this.errorEnBack = true;
+
       return;
     }
 
     if (this.isEdit) {
       const catIdIni = this.categoryId();
-      const catId = catIdIni ? Number(catIdIni) : NaN;
+
+      const catId = catIdIni ? Number(catIdIni) : NaN;  //si catIdIni es null, lo convierto a NaN para que 
+                                                        // entre en el if y se maneje el error
       if (Number.isNaN(catId)) {
         this.solicitudABackEnCurso = false;
         this.errorEnBack = true;

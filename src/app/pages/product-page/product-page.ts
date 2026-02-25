@@ -9,7 +9,7 @@ import { ProductService } from '../../services/product-service';
 import { ProductForReadDTO } from '../../interfaces/product-interface';
 
 import Swal from 'sweetalert2';
-import { Toast } from '../../utils/modals.ts';
+import { Toast } from '../../utils/modals';
 ////////////////////////////////////////////////////////////////////////////////
 
 @Component({
@@ -47,6 +47,7 @@ export class ProductPage implements OnInit {
     const categ = await this.categoryService.getById(prodId.id_Category);
     this.restaurantBack = categ?.Id_Restaurant ?? null;
 
+    //valor canEdit 
     this.canEdit =
       !!this.auth.token &&
       this.restaurantBack !== null &&
@@ -60,15 +61,15 @@ export class ProductPage implements OnInit {
       this.router.navigate(['']);
     }
   }
-  
+
   editProduct() {
     if (!this.canEdit || !this.product || this.restaurantBack === null) return;
     this.router.navigate(['/edit-product-page', this.restaurantBack, this.product.id_Category, this.product.id_Product]);
   }
-  
+
   async deleteProduct() {
     if (!this.canEdit || !this.product) return;
-    
+
     const result = await Swal.fire({
       title: '¿Eliminar producto?',
       text: 'Esta acción no se puede deshacer.',
@@ -83,22 +84,22 @@ export class ProductPage implements OnInit {
         cancelButton: 'swal-cancel',
       }
     });
-    
+
     if (!result.isConfirmed) return;
-    
-    const ok = this.productService.deleteProduct(this.product.id_Product);
-    
+
+    const ok = await this.productService.deleteProduct(this.product.id_Product);
+
     if (!ok) {
-      Toast.fire({icon: 'error', title: 'No se pudo eliminar el producto'});
+      Toast.fire({ icon: 'error', title: 'No se pudo eliminar el producto' });
       return;
     }
-    
-    Toast.fire({icon: 'success', title: 'Producto eliminado'});
-    
+
+    Toast.fire({ icon: 'success', title: 'Producto eliminado' });
+
     this.backMenu();
   }
-  
-  
+
+
   //Metodos fuera de CRUD
   getDiscountPrice(): number {
     if (!this.product) return 0;
@@ -106,34 +107,34 @@ export class ProductPage implements OnInit {
     return this.product.price - (this.product.price * descuentoPorcentaje / 100);
   }
 
-  async changeDiscount() {
-    if (!this.canEdit || !this.product) return;
+  // async changeDiscount() {
+  //   if (!this.canEdit || !this.product) return;
 
-    const current = this.product.discount ?? 0;
+  //   const current = this.product.discount ?? 0;
 
-    const value = prompt("Nuevo descuento (%)", String(current));
-    if (value === null) return;
+  //   const value = prompt("Nuevo descuento (%)", String(current));
+  //   if (value === null) return;
 
-    const discount = Number(value);
+  //   const discount = Number(value);
 
-    if (Number.isNaN(discount) || discount < 0 || discount > 90) {
-      alert("Descuento inválido. Usá un número entre 0 y 90.");
-      return;
-    }
+  //   if (Number.isNaN(discount) || discount < 0 || discount > 90) {
+  //     alert("Descuento inválido. Usá un número entre 0 y 90.");
+  //     return;
+  //   }
 
-    const ok = await this.productService.updateDiscount(
-      this.product.id_Product,
-      discount
-    );
+  //   const ok = await this.productService.updateDiscount(
+  //     this.product.id_Product,
+  //     discount
+  //   );
 
-    if (!ok) {
-      this.errorEnBack = true;
-      return;
-    }
+  //   if (!ok) {
+  //     this.errorEnBack = true;
+  //     return;
+  //   }
 
-    // reflejo inmediato en UI
-    this.product.discount = discount;
-  }
+  //   // reflejo inmediato en UI
+  //   this.product.discount = discount;
+  // }
 
   async toggleHappyHour() {
     if (!this.product) return;

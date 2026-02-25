@@ -12,7 +12,6 @@
 
                 @if (name.invalid && newProductForm.submitted) {
                 @if (name.errors?.['required']) { <p class="error">Nombre obligatorio.</p> }
-                @if (name.errors?.['minlength']) { <p class="error">Mínimo 2 caracteres.</p> }
                 }
             </div>
 

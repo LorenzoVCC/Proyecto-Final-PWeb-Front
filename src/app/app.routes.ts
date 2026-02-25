@@ -10,6 +10,7 @@ import { ProductPage } from './pages/product-page/product-page';
 import { NewProductPage } from './pages/new-product-page/new-product-page';
 
 import { ClientLayout } from './layouts/client-layout/client-layout';
+
 import { NewCategoryPage } from './pages/new-category-page/new-category-page';
 
 import { authGuard } from './guards/auth-guard';
@@ -36,7 +37,7 @@ export const routes: Routes = [
     component: RegisterPage,
     canActivate: [publicGuard]
   },
-
+  
   {
     path: "",
     component: ClientLayout,
@@ -48,13 +49,14 @@ export const routes: Routes = [
         canActivate: [ownerGuard]
       },
       {
-        path: "create-category/:restaurantId", 
+        path: "create-category/:restaurantId",
         component: NewCategoryPage,
         canActivate: [ownerGuard]
       },
-      { path: 'edit-category/:restaurantId/:categoryId', 
+      {
+        path: 'edit-category/:restaurantId/:categoryId',
         component: NewCategoryPage,
-        canActivate: [ownerGuard] 
+        canActivate: [ownerGuard]
       },
       {
         path: "new-product-page/:restaurantId/:categoryId",
@@ -65,11 +67,6 @@ export const routes: Routes = [
         path: "edit-product-page/:restaurantId/:categoryId/:productId",
         component: NewProductPage,
         canActivate: [ownerGuard],
-      },
-      {
-        path: "product-page/:id",
-        component: ProductPage,
-        canActivate: [ownerGuard],        
       },
     ],
   },

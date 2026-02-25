@@ -270,6 +270,12 @@
         width: 300px;
     }
 
+    :host-context(.theme-dark) .filters-dropdown {
+        background-color: var(--d-cream);
+        color: #f4f2e8;
+        transition: 1s;
+    }
+
     .row {
         display: flex;
         justify-content: space-between;

@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 type Theme = 'light' | 'dark';
 
 @Injectable({ providedIn: 'root' })
+
 export class ThemeService {
 
   private readonly themeMode = 'theme';
 
   init() {
-    const saved = (localStorage.getItem(this.themeMode) as Theme) || 'light';
+    const saved = (localStorage.getItem(this.themeMode) as Theme) || 'dark';
     this.apply(saved);
   }
 
@@ -28,7 +29,5 @@ export class ThemeService {
   isDark(): boolean {
     const current = (localStorage.getItem(this.themeMode) as Theme) || 'light';
     return current === 'dark';
-
   }
-
 }

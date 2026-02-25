@@ -22,6 +22,7 @@
         </section>
         <!--  -->
 
+        <!-- Destacados -->
         @if (!searching && featuredProducts.length) {
         <section class="container-for-featured">
             <div class="category-header-featured">
@@ -164,11 +165,11 @@
                 <div class="category-header">
                     <h2>{{ c.Name }}</h2>
 
-                    @if (auth.token && auth.restaurantId === restaurant?.id) {
-                    <a [routerLink]="['/new-product-page', restaurant?.id, c.Id_Category]">
-                        <button class="add-category-btn" type="button">+</button>
-                    </a>
-                    }
+                        @if (auth.token && auth.restaurantId === restaurant?.id) {
+                        <a [routerLink]="['/new-product-page', restaurant?.id, c.Id_Category]">
+                            <button class="add-category-btn" type="button">+</button>
+                        </a>
+                        }
                 </div>
 
                 <div class="products-container-1">

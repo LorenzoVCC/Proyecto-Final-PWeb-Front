@@ -53,7 +53,7 @@ export class RegisterPage implements OnInit {
         slug: resto.slug,
       });
     }, 0);
-  }
+    }
   ////////////////////////////
   async handleFormSubmission(form: NgForm) {
     this.errorEnBack = false;

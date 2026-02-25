@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, RedirectCommand, Router } from '@angular/router';
 import { Auth } from '../services/auth-service';
-//import { fakeAsync } from '@angular/core/testing';
+
 
 export const ownerGuard: CanActivateFn = (route, state) => {
   const auth = inject(Auth);

@@ -26,7 +26,7 @@ export class NewProductPage implements OnInit {
   auth = inject(Auth);
   router = inject(Router);
 
-  //Paso los parametros recibidos por la URL a las variables restaurantId y categoryId
+  //Paso los parametros recibidos por la URL a las variables restaurantId y categoryId y productId (si es que existe)
   restaurantId = input.required<string>();
   categoryId = input.required<string>();
   productId = input<string | null>(null);
@@ -39,12 +39,10 @@ export class NewProductPage implements OnInit {
   errorEnBack = false;
   solicitudABackEnCurso = false;
 
+  
   async ngOnInit() {
     const loggedRestaurant = this.auth.restaurantId;
-    if (!loggedRestaurant) {
-      this.router.navigate(['/login'])
-      return;
-    }
+    if (!loggedRestaurant) return;
 
     const urlRestaurantId = Number(this.restaurantId());
     const urlCategoryId = Number(this.categoryId());
@@ -68,8 +66,8 @@ export class NewProductPage implements OnInit {
 
     //Proceso para ir parseando el id
     const productIdx = this.productId();
-    if (!productIdx) return; //create
-
+    if (!productIdx) return; 
+    
     const prodId = Number(productIdx);
     if (Number.isNaN(prodId)) return;
 
@@ -118,7 +116,7 @@ export class NewProductPage implements OnInit {
       this.errorEnBack = true;
       return;
     }
-
+///////////////////////
     if (this.isEdit) {
       const productIdx = this.productId();
       const prodId = productIdx ? Number(productIdx) : NaN;
@@ -152,7 +150,7 @@ export class NewProductPage implements OnInit {
       this.router.navigate(['/restaurant-page', urlRestaurantId]);
       return;
     }
-
+///////////////////////
     const created = await this.productService.createProduct(dto);
     this.solicitudABackEnCurso = false;
 

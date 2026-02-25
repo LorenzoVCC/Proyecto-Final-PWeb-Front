@@ -3,18 +3,10 @@ import { Auth } from './auth-service';
 import { ProductForCreateUpdateDTO, ProductForReadDTO } from '../interfaces/product-interface';
 import { API_URL } from '../config/api';
 
-export type ProductSearchParams = {
-  RestaurantId?: number;  // SOLO si lo agregás en back
-  CategoryId?: number;
-  HappyHour?: boolean;
-  Featured?: boolean;
-  MinPrice?: number;
-  MaxPrice?: number;
-  Q?: string;
-};
-
 @Injectable({ providedIn: 'root' })
+
 export class ProductService {
+
   auth = inject(Auth);
   readonly URL_BASE = `${API_URL}/api/Product`;
 
@@ -237,7 +229,6 @@ export class ProductService {
         ? { ...p, isFeatured: !p.isFeatured }
         : p
     );
-
     return true;
   }
 
@@ -249,6 +240,7 @@ export class ProductService {
     featured?: boolean;
     minPrice?: number;
     maxPrice?: number;
+
   }): Promise<ProductForReadDTO[]> {
 
     const qs = new URLSearchParams();

@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RestaurantService } from '../../services/restaurant-service';
 import { ThemeService } from '../../services/theme-service';
 import Swal from 'sweetalert2';
-import { Toast } from '../../utils/modals.ts';
+import { Toast } from '../../utils/modals';
 
 @Component({
   selector: 'app-header',
@@ -29,10 +29,6 @@ export class Header {
 
   logout() { this.auth.logout(); this.menuOpen = false; }
 
-  get isLogged(): boolean {
-    return !!this.auth.token;
-  }
-
   async deleteMyRestaurant() {
     const id = this.auth.restaurantId;
     if (!id) return;
@@ -53,6 +49,7 @@ export class Header {
     });
 
     if (!result.isConfirmed) return;
+    //// si (isConfirmed...)
     const ok = this.restaurantService.deleteResto(id);
 
     if (!ok) {
